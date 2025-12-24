@@ -15,6 +15,11 @@ export const metadata: Metadata = {
   description: "Transform your business with cutting-edge AI technology. ANDRIGA provides expert AI solutions for small to medium-sized businesses, helping employees and customers in day-to-day operations.",
   keywords: ["AI solutions", "digital transformation", "artificial intelligence", "business automation", "AI consulting"],
   authors: [{ name: "ANDRIGA" }],
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/favicon.ico",
+    apple: "/icon.png",
+  },
   openGraph: {
     title: "ANDRIGA | AI Solutions for Digital Transformation",
     description: "Transform your business with cutting-edge AI technology.",

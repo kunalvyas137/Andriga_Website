@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Sparkles } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 const navLinks = [
     { href: "/", label: "Home" },
@@ -45,15 +46,21 @@ export default function Header() {
             <div className="container">
                 <nav className="flex items-center justify-between">
                     {/* Logo */}
-                    <Link href="/" className="flex items-center gap-2 group">
+                    <Link href="/" className="flex items-center gap-3 group">
                         <motion.div
-                            className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] flex items-center justify-center"
-                            whileHover={{ scale: 1.05, rotate: 5 }}
+                            whileHover={{ scale: 1.05 }}
                             transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                            className="relative"
                         >
-                            <Sparkles className="w-5 h-5 text-white" />
+                            <Image
+                                src="/andriga-logo.png"
+                                alt="ANDRIGA Logo"
+                                width={350}
+                                height={125}
+                                className="h-20 w-auto"
+                                priority
+                            />
                         </motion.div>
-                        <span className="text-xl font-bold tracking-tight">ANDRIGA</span>
                     </Link>
 
                     {/* Desktop Navigation */}
@@ -63,10 +70,10 @@ export default function Header() {
                                 key={link.href}
                                 href={link.href}
                                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${link.isHighlighted
-                                        ? "bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] text-white hover:opacity-90"
-                                        : isActive(link.href)
-                                            ? "bg-[var(--accent-primary)]/10 text-[var(--accent-primary)] font-semibold"
-                                            : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]"
+                                    ? "bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] text-white hover:opacity-90"
+                                    : isActive(link.href)
+                                        ? "bg-[var(--accent-primary)]/10 text-[var(--accent-primary)] font-semibold"
+                                        : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]"
                                     }`}
                             >
                                 {link.label}
@@ -114,10 +121,10 @@ export default function Header() {
                                         key={link.href}
                                         href={link.href}
                                         className={`block px-4 py-3 rounded-xl text-base font-medium transition-all ${link.isHighlighted
-                                                ? "bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] text-white"
-                                                : isActive(link.href)
-                                                    ? "bg-[var(--accent-primary)]/10 text-[var(--accent-primary)] font-semibold"
-                                                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]"
+                                            ? "bg-gradient-to-r from-[var(--accent-primary)] to-[var(--accent-secondary)] text-white"
+                                            : isActive(link.href)
+                                                ? "bg-[var(--accent-primary)]/10 text-[var(--accent-primary)] font-semibold"
+                                                : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]"
                                             }`}
                                         onClick={() => setIsMobileMenuOpen(false)}
                                     >

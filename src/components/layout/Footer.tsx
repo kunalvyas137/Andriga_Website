@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Sparkles, Linkedin, Twitter, Github, Mail } from "lucide-react";
+import Image from "next/image";
+import { Linkedin, Twitter, Github, Mail } from "lucide-react";
 
 const footerLinks = {
     product: [
@@ -37,11 +38,14 @@ export default function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
                     {/* Brand Column */}
                     <div className="lg:col-span-2">
-                        <Link href="/" className="flex items-center gap-2 mb-4">
-                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] flex items-center justify-center">
-                                <Sparkles className="w-5 h-5 text-white" />
-                            </div>
-                            <span className="text-xl font-bold tracking-tight">ANDRIGA</span>
+                        <Link href="/" className="flex items-center mb-4">
+                            <Image
+                                src="/andriga-logo.png"
+                                alt="ANDRIGA Logo"
+                                width={350}
+                                height={125}
+                                className="h-20 w-auto"
+                            />
                         </Link>
                         <p className="text-[var(--text-secondary)] mb-6 max-w-sm">
                             Empowering businesses with cutting-edge AI solutions. Transform your operations,

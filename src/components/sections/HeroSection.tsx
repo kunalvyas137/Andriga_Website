@@ -4,48 +4,22 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Button from "@/components/ui/Button";
 import GradientText from "@/components/ui/GradientText";
-import { ArrowRight, Play, Sparkles, Zap, Shield, BarChart3 } from "lucide-react";
-
-const floatingIcons = [
-    { Icon: Sparkles, delay: 0, x: "10%", y: "20%" },
-    { Icon: Zap, delay: 0.2, x: "85%", y: "15%" },
-    { Icon: Shield, delay: 0.4, x: "75%", y: "70%" },
-    { Icon: BarChart3, delay: 0.6, x: "15%", y: "75%" },
-];
+import { ArrowRight, Play, Sparkles } from "lucide-react";
 
 export default function HeroSection() {
     return (
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-            {/* Background Effects */}
-            <div className="absolute inset-0 bg-gradient-radial" />
-
-            {/* Gradient Orbs */}
-            <div className="gradient-orb gradient-orb-1 animate-float" />
-            <div className="gradient-orb gradient-orb-2 animate-float" style={{ animationDelay: "-3s" }} />
-
-            {/* Grid Background */}
-            <div className="absolute inset-0 bg-grid opacity-50" />
-
-            {/* Floating Icons */}
-            {floatingIcons.map(({ Icon, delay, x, y }, index) => (
-                <motion.div
-                    key={index}
-                    className="absolute hidden lg:block"
-                    style={{ left: x, top: y }}
-                    initial={{ opacity: 0, scale: 0 }}
-                    animate={{ opacity: 0.3, scale: 1 }}
-                    transition={{ delay: delay + 0.5, duration: 0.5 }}
-                >
-                    <motion.div
-                        animate={{ y: [0, -10, 0] }}
-                        transition={{ duration: 4, repeat: Infinity, delay }}
-                    >
-                        <div className="w-12 h-12 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-subtle)] flex items-center justify-center">
-                            <Icon className="w-6 h-6 text-[var(--accent-primary)]" />
-                        </div>
-                    </motion.div>
-                </motion.div>
-            ))}
+            {/* Hero Background Image */}
+            <div className="absolute inset-0 z-0">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                    src="/hero-banner.png"
+                    alt="AI Technology Background"
+                    className="w-full h-full object-cover opacity-90"
+                />
+                {/* Overlay for better text readability */}
+                <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-primary)]/70 via-[var(--bg-primary)]/50 to-[var(--bg-primary)]" />
+            </div>
 
             {/* Content */}
             <div className="container relative z-10">
@@ -56,7 +30,7 @@ export default function HeroSection() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
                     >
-                        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/20 text-sm text-[var(--accent-primary)] mb-6">
+                        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/20 text-sm text-[var(--accent-primary)] mb-6 backdrop-blur-sm">
                             <Sparkles className="w-4 h-4" />
                             <span>Powered by Advanced AI Technology</span>
                         </span>
@@ -127,7 +101,7 @@ export default function HeroSection() {
             </div>
 
             {/* Bottom Gradient Fade */}
-            <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[var(--bg-primary)] to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[var(--bg-primary)] to-transparent z-[5]" />
         </section>
     );
 }
