@@ -9,6 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@builder.io/sdk": "^6.2.0",
+    "@builder.io/sdk-react": "^5.1.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.26",
     "lucide-react": "^0.562.0",

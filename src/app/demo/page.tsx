@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import Section from "@/components/ui/Section";
 import Button from "@/components/ui/Button";
 import GradientText from "@/components/ui/GradientText";
-import { Bot, User, Send, RefreshCw, FileText, Edit3, Sparkles } from "lucide-react";
+import { Bot, User, Send, RefreshCw, FileText, Edit3, Sparkles, Mic, MicOff, Volume2, VolumeX } from "lucide-react";
 
 // Hospital context data
 const defaultContext = `# City Health Medical Center
@@ -69,13 +69,66 @@ const initialMessages: Message[] = [
     },
 ];
 
+// Type declarations for Web Speech API
+interface SpeechRecognitionEvent extends Event {
+    results: SpeechRecognitionResultList;
+    resultIndex: number;
+}
+
+interface SpeechRecognitionResultList {
+    length: number;
+    item(index: number): SpeechRecognitionResult;
+    [index: number]: SpeechRecognitionResult;
+}
+
+interface SpeechRecognitionResult {
+    isFinal: boolean;
+    length: number;
+    item(index: number): SpeechRecognitionAlternative;
+    [index: number]: SpeechRecognitionAlternative;
+}
+
+interface SpeechRecognitionAlternative {
+    transcript: string;
+    confidence: number;
+}
+
+interface SpeechRecognition extends EventTarget {
+    continuous: boolean;
+    interimResults: boolean;
+    lang: string;
+    onresult: ((event: SpeechRecognitionEvent) => void) | null;
+    onerror: ((event: Event) => void) | null;
+    onend: (() => void) | null;
+    start(): void;
+    stop(): void;
+    abort(): void;
+}
+
+declare global {
+    interface Window {
+        SpeechRecognition: new () => SpeechRecognition;
+        webkitSpeechRecognition: new () => SpeechRecognition;
+    }
+}
+
 export default function DemoPage() {
     const [context, setContext] = useState(defaultContext);
     const [isEditingContext, setIsEditingContext] = useState(false);
     const [messages, setMessages] = useState<Message[]>(initialMessages);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [isListening, setIsListening] = useState(false);
+    const [isSpeechEnabled, setIsSpeechEnabled] = useState(true);
+    const [speechSupported, setSpeechSupported] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const recognitionRef = useRef<SpeechRecognition | null>(null);
+
+    // Check for speech support on mount
+    useEffect(() => {
+        const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
+        setSpeechSupported(!!SpeechRecognitionAPI && !!window.speechSynthesis);
+    }, []);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -84,6 +137,67 @@ export default function DemoPage() {
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
+
+    // Text-to-Speech function
+    const speakText = useCallback((text: string) => {
+        if (!isSpeechEnabled || !window.speechSynthesis) return;
+
+        // Cancel any ongoing speech
+        window.speechSynthesis.cancel();
+
+        // Clean markdown formatting for better speech
+        const cleanText = text
+            .replace(/\*\*/g, "")
+            .replace(/\*/g, "")
+            .replace(/•/g, "")
+            .replace(/\n/g, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        utterance.rate = 1;
+        utterance.pitch = 1;
+        utterance.volume = 1;
+        window.speechSynthesis.speak(utterance);
+    }, [isSpeechEnabled]);
+
+    // Speech-to-Text function
+    const toggleListening = useCallback(() => {
+        if (!speechSupported) return;
+
+        if (isListening) {
+            recognitionRef.current?.stop();
+            setIsListening(false);
+            return;
+        }
+
+        const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognitionAPI) return;
+
+        const recognition = new SpeechRecognitionAPI();
+        recognition.continuous = false;
+        recognition.interimResults = true;
+        recognition.lang = "en-US";
+
+        recognition.onresult = (event: SpeechRecognitionEvent) => {
+            const transcript = Array.from(event.results)
+                .map((result) => result[0].transcript)
+                .join("");
+            setInput(transcript);
+        };
+
+        recognition.onerror = () => {
+            setIsListening(false);
+        };
+
+        recognition.onend = () => {
+            setIsListening(false);
+        };
+
+        recognitionRef.current = recognition;
+        recognition.start();
+        setIsListening(true);
+    }, [isListening, speechSupported]);
 
     const handleSend = async () => {
         if (!input.trim() || isLoading) return;
@@ -98,23 +212,58 @@ export default function DemoPage() {
         setInput("");
         setIsLoading(true);
 
-        // Simulate AI response (in production, this would call the Gemini API)
-        setTimeout(() => {
-            const aiResponse = generateSimulatedResponse(input.trim(), context);
+        try {
+            const response = await fetch("/api/chat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    message: input.trim(),
+                    context: context,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
             const assistantMessage: Message = {
                 id: (Date.now() + 1).toString(),
                 role: "assistant",
-                content: aiResponse,
+                content: data.response,
             };
             setMessages((prev) => [...prev, assistantMessage]);
+
+            // Speak the response
+            speakText(data.response);
+        } catch (error) {
+            console.error("Error sending message:", error);
+            const errorMessage: Message = {
+                id: (Date.now() + 1).toString(),
+                role: "assistant",
+                content: "I apologize, but I encountered an error processing your request. Please try again.",
+            };
+            setMessages((prev) => [...prev, errorMessage]);
+        } finally {
             setIsLoading(false);
-        }, 1500);
+        }
     };
 
     const handleReset = () => {
         setMessages(initialMessages);
         setContext(defaultContext);
         setIsEditingContext(false);
+        window.speechSynthesis?.cancel();
+    };
+
+    const toggleSpeech = () => {
+        if (isSpeechEnabled) {
+            window.speechSynthesis?.cancel();
+        }
+        setIsSpeechEnabled(!isSpeechEnabled);
     };
 
     return (
@@ -142,6 +291,11 @@ export default function DemoPage() {
                             See how our AI assistant reads context and provides intelligent,
                             relevant responses. Try the hospital appointment booking simulation below.
                         </p>
+                        {speechSupported && (
+                            <p className="text-sm text-[var(--accent-primary)] mt-2">
+                                🎤 Voice enabled! Click the microphone to speak, or toggle the speaker for audio responses.
+                            </p>
+                        )}
                     </motion.div>
                 </div>
             </section>
@@ -164,10 +318,26 @@ export default function DemoPage() {
                             </div>
                             <span className="text-sm font-medium">RAG Demo - Hospital Appointment System</span>
                         </div>
-                        <Button variant="ghost" size="sm" onClick={handleReset}>
-                            <RefreshCw className="w-4 h-4" />
-                            Reset
-                        </Button>
+                        <div className="flex items-center gap-2">
+                            {speechSupported && (
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={toggleSpeech}
+                                    title={isSpeechEnabled ? "Disable voice responses" : "Enable voice responses"}
+                                >
+                                    {isSpeechEnabled ? (
+                                        <Volume2 className="w-4 h-4 text-[var(--accent-primary)]" />
+                                    ) : (
+                                        <VolumeX className="w-4 h-4" />
+                                    )}
+                                </Button>
+                            )}
+                            <Button variant="ghost" size="sm" onClick={handleReset}>
+                                <RefreshCw className="w-4 h-4" />
+                                Reset
+                            </Button>
+                        </div>
                     </div>
 
                     {/* Split View */}
@@ -224,8 +394,8 @@ export default function DemoPage() {
                                     >
                                         <div
                                             className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${message.role === "user"
-                                                    ? "bg-[var(--accent-primary)]"
-                                                    : "bg-[var(--accent-primary)]/20"
+                                                ? "bg-[var(--accent-primary)]"
+                                                : "bg-[var(--accent-primary)]/20"
                                                 }`}
                                         >
                                             {message.role === "user" ? (
@@ -236,8 +406,8 @@ export default function DemoPage() {
                                         </div>
                                         <div
                                             className={`max-w-[80%] p-3 rounded-2xl text-sm ${message.role === "user"
-                                                    ? "bg-[var(--accent-primary)] text-white rounded-br-sm"
-                                                    : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] rounded-bl-sm"
+                                                ? "bg-[var(--accent-primary)] text-white rounded-br-sm"
+                                                : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] rounded-bl-sm"
                                                 }`}
                                         >
                                             <pre className="whitespace-pre-wrap font-sans">{message.content}</pre>
@@ -279,16 +449,33 @@ export default function DemoPage() {
                                         type="text"
                                         value={input}
                                         onChange={(e) => setInput(e.target.value)}
-                                        placeholder="Type your message..."
+                                        placeholder={isListening ? "Listening..." : "Type your message..."}
                                         className="flex-1 px-4 py-3 rounded-full bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)] transition-colors"
                                         disabled={isLoading}
                                     />
+                                    {speechSupported && (
+                                        <Button
+                                            type="button"
+                                            variant={isListening ? "primary" : "secondary"}
+                                            onClick={toggleListening}
+                                            disabled={isLoading}
+                                            title={isListening ? "Stop listening" : "Start voice input"}
+                                        >
+                                            {isListening ? (
+                                                <MicOff className="w-4 h-4" />
+                                            ) : (
+                                                <Mic className="w-4 h-4" />
+                                            )}
+                                        </Button>
+                                    )}
                                     <Button type="submit" disabled={isLoading || !input.trim()}>
                                         <Send className="w-4 h-4" />
                                     </Button>
                                 </form>
                                 <p className="mt-2 text-xs text-[var(--text-tertiary)] text-center">
-                                    This is a demo simulation. Connect your Gemini API key for real AI responses.
+                                    {speechSupported
+                                        ? "Voice enabled! Click the mic to speak or type your message."
+                                        : "This demo uses our API backend. Connect your Gemini API key for real AI responses."}
                                 </p>
                             </div>
                         </div>
@@ -331,35 +518,4 @@ export default function DemoPage() {
             </Section>
         </>
     );
-}
-
-// Simulated response generator (in production, this would use Gemini API)
-function generateSimulatedResponse(query: string, context: string): string {
-    const lowerQuery = query.toLowerCase();
-
-    if (lowerQuery.includes("cardiologist") || lowerQuery.includes("heart") || lowerQuery.includes("cardiac")) {
-        return "Based on our records, **Dr. Sarah Smith** is our cardiologist specializing in heart health and cardiovascular diseases.\n\n**Availability:**\n• Monday, Wednesday, Friday\n• Time slots: 9:00 AM, 10:00 AM, 2:00 PM, 4:00 PM\n• Consultation fee: $150\n\nWould you like me to help you book an appointment with Dr. Smith?";
-    }
-
-    if (lowerQuery.includes("neurologist") || lowerQuery.includes("brain") || lowerQuery.includes("nerve")) {
-        return "For neurological concerns, we have **Dr. James Johnson**, our expert neurologist.\n\n**Availability:**\n• Tuesday, Thursday\n• Time slots: 10:00 AM, 11:00 AM, 3:00 PM\n• Consultation fee: $175\n\nWould you like to schedule an appointment?";
-    }
-
-    if (lowerQuery.includes("pediatrician") || lowerQuery.includes("child") || lowerQuery.includes("kid")) {
-        return "For children's healthcare, **Dr. Emily Chen** is our pediatrician.\n\n**Availability:**\n• Monday, Tuesday, Wednesday\n• Time slots: 9:00 AM, 11:00 AM, 2:00 PM, 4:00 PM\n• Consultation fee: $120\n\nShe specializes in child healthcare and vaccinations. Would you like to book an appointment?";
-    }
-
-    if (lowerQuery.includes("book") || lowerQuery.includes("appointment") || lowerQuery.includes("schedule")) {
-        return "I'd be happy to help you book an appointment! To proceed, please let me know:\n\n1. **Which doctor** would you like to see?\n2. **Preferred day** (check doctor's availability)\n3. **Preferred time slot**\n\nOur available specialists are:\n• Dr. Sarah Smith (Cardiologist)\n• Dr. James Johnson (Neurologist)\n• Dr. Emily Chen (Pediatrician)\n• Dr. Michael Brown (Orthopedic)\n• Dr. Lisa Davis (Dermatologist)";
-    }
-
-    if (lowerQuery.includes("doctor") || lowerQuery.includes("available") || lowerQuery.includes("list")) {
-        return "Here are all our available doctors:\n\n1. **Dr. Sarah Smith** - Cardiologist (Mon, Wed, Fri)\n2. **Dr. James Johnson** - Neurologist (Tue, Thu)\n3. **Dr. Emily Chen** - Pediatrician (Mon, Tue, Wed)\n4. **Dr. Michael Brown** - Orthopedic Surgeon (Wed, Thu, Fri)\n5. **Dr. Lisa Davis** - Dermatologist (Mon, Fri)\n\nWhich specialist are you interested in?";
-    }
-
-    if (lowerQuery.includes("fee") || lowerQuery.includes("cost") || lowerQuery.includes("price")) {
-        return "Here are our consultation fees:\n\n• **Cardiology** (Dr. Smith): $150\n• **Neurology** (Dr. Johnson): $175\n• **Pediatrics** (Dr. Chen): $120\n• **Orthopedics** (Dr. Brown): $200\n• **Dermatology** (Dr. Davis): $130\n\nWould you like more information about any specific doctor?";
-    }
-
-    return "I understand you're looking for assistance. Based on the hospital information available to me, I can help with:\n\n• Finding the right doctor for your needs\n• Checking availability and time slots\n• Booking appointments\n• Information about consultation fees\n\nCould you please provide more details about what you need? For example, are you looking to see a specific type of specialist?";
 }
