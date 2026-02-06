@@ -13,6 +13,7 @@ interface ButtonProps {
     disabled?: boolean;
     type?: "button" | "submit" | "reset";
     onClick?: () => void;
+    title?: string;
 }
 
 export default function Button({
@@ -24,6 +25,7 @@ export default function Button({
     disabled,
     type = "button",
     onClick,
+    title,
 }: ButtonProps) {
     const baseStyles = "inline-flex items-center justify-center gap-2 font-medium transition-all duration-200 cursor-pointer border-none outline-none disabled:opacity-50 disabled:cursor-not-allowed";
 
@@ -47,6 +49,7 @@ export default function Button({
             disabled={disabled || isLoading}
             type={type}
             onClick={onClick}
+            title={title}
         >
             {isLoading ? (
                 <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
