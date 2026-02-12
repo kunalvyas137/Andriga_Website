@@ -494,46 +494,38 @@ export default function DemoPage() {
     };
 
     return (
-        <>
-            {/* Hero Section */}
-            <section className="relative pt-32 pb-8 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-radial" />
-                <div className="gradient-orb gradient-orb-1 animate-float opacity-20" />
-
-                <div className="container relative z-10">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="max-w-3xl mx-auto text-center"
-                    >
-                        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/20 text-sm text-[var(--accent-primary)] mb-6">
-                            <Sparkles className="w-4 h-4" />
-                            Interactive AI Demo - Powered by Gemini
-                        </span>
-                        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-                            Experience <GradientText>RAG-Powered AI</GradientText>
-                        </h1>
-                        <p className="text-lg text-[var(--text-secondary)]">
-                            See how our AI assistant reads context and provides intelligent,
-                            relevant responses. Try the hospital appointment booking simulation below.
-                        </p>
+        <div className="min-h-screen flex flex-col">
+            {/* Compact Header */}
+            <div className="relative border-b border-[var(--border-default)] bg-[var(--bg-primary)]/80 backdrop-blur-sm">
+                <div className="absolute inset-0 bg-gradient-radial opacity-30" />
+                <div className="container relative z-10 py-4">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/20 text-xs text-[var(--accent-primary)]">
+                                <Sparkles className="w-3.5 h-3.5" />
+                                Interactive AI Demo
+                            </span>
+                            <h1 className="text-xl md:text-2xl font-bold">
+                                <GradientText>RAG-Powered AI</GradientText> Assistant
+                            </h1>
+                        </div>
                         {speechSupported && (
-                            <p className="text-sm text-[var(--accent-primary)] mt-2">
-                                🎤 Voice enabled! Click the microphone to speak, or toggle the speaker for audio responses.
-                            </p>
+                            <span className="hidden md:flex items-center gap-2 text-xs text-[var(--accent-primary)]">
+                                <Mic className="w-3.5 h-3.5" />
+                                Voice enabled
+                            </span>
                         )}
-                    </motion.div>
+                    </div>
                 </div>
-            </section>
+            </div>
 
-            {/* Demo Interface */}
-            <Section className="py-8">
+            {/* Centered Demo Interface */}
+            <div className="flex-1 flex items-center justify-center p-4 md:p-8">
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    className="bg-[var(--bg-secondary)] border border-[var(--border-default)] rounded-2xl overflow-hidden shadow-2xl"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.4 }}
+                    className="w-full max-w-7xl h-[85vh] bg-[var(--bg-secondary)] border border-[var(--border-default)] rounded-2xl overflow-hidden shadow-2xl"
                 >
                     {/* Demo Header */}
                     <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border-default)] bg-[var(--bg-elevated)]">
@@ -669,7 +661,7 @@ export default function DemoPage() {
                     </AnimatePresence>
 
                     {/* Split View */}
-                    <div className="grid lg:grid-cols-2 h-[600px]">
+                    <div className="grid lg:grid-cols-2 h-full">
                         {/* Context Panel */}
                         <div className="border-r border-[var(--border-default)] flex flex-col h-full min-h-0">
                             <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-default)] bg-[var(--bg-primary)]">
@@ -869,41 +861,7 @@ export default function DemoPage() {
                         </div>
                     </div>
                 </motion.div>
-            </Section>
-
-            {/* How it Works */}
-            <Section>
-                <div className="max-w-3xl mx-auto text-center">
-                    <h2 className="text-2xl md:text-3xl font-bold mb-6">How RAG Works</h2>
-                    <div className="grid md:grid-cols-3 gap-6">
-                        {[
-                            {
-                                step: "1",
-                                title: "Context Loading",
-                                description: "The AI reads and indexes the context document (left panel) to understand available information.",
-                            },
-                            {
-                                step: "2",
-                                title: "Query Understanding",
-                                description: "When you ask a question, the AI analyzes your intent and retrieves relevant context.",
-                            },
-                            {
-                                step: "3",
-                                title: "Intelligent Response",
-                                description: "The AI generates accurate, contextual responses based on the retrieved information.",
-                            },
-                        ].map((item) => (
-                            <div key={item.step} className="text-center">
-                                <div className="w-10 h-10 rounded-full bg-[var(--accent-primary)] text-white font-bold flex items-center justify-center mx-auto mb-3">
-                                    {item.step}
-                                </div>
-                                <h3 className="font-semibold mb-2">{item.title}</h3>
-                                <p className="text-sm text-[var(--text-secondary)]">{item.description}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </Section>
-        </>
+            </div>
+        </div>
     );
 }
