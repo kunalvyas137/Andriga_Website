@@ -669,7 +669,7 @@ export default function DemoPage() {
                         </AnimatePresence>
 
                         {/* Split View */}
-                        <div className="grid lg:grid-cols-2 flex-1 min-h-0">
+                        <div className="grid lg:grid-cols-2 h-[800px] flex-1 min-h-0">
                             {/* Context Panel */}
                             <div className="border-r border-[var(--border-default)] flex flex-col min-h-0 overflow-hidden">
                                 <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-default)] bg-[var(--bg-primary)]">
@@ -830,6 +830,11 @@ export default function DemoPage() {
                                             type="text"
                                             value={input}
                                             onChange={(e) => setInput(e.target.value)}
+                                            onFocus={(e) => {
+                                                // Prevent automatic page scroll when input is focused
+                                                const scrollY = window.scrollY;
+                                                setTimeout(() => window.scrollTo(0, scrollY), 0);
+                                            }}
                                             placeholder={isListening ? "Listening..." : "Type your message..."}
                                             className="flex-1 px-4 py-3 rounded-full bg-[var(--bg-elevated)] border border-[var(--border-strong)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)] transition-colors"
                                             disabled={isLoading}
