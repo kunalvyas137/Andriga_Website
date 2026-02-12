@@ -494,9 +494,9 @@ export default function DemoPage() {
     };
 
     return (
-        <>
+        <div className="fixed inset-0 flex flex-col overflow-hidden">
             {/* Hero Section */}
-            <section className="relative pt-32 pb-8 overflow-hidden">
+            <section className="relative pt-20 pb-6 flex-shrink-0">
                 <div className="absolute inset-0 bg-gradient-radial" />
                 <div className="gradient-orb gradient-orb-1 animate-float opacity-20" />
 
@@ -511,16 +511,15 @@ export default function DemoPage() {
                             <Sparkles className="w-4 h-4" />
                             Interactive AI Demo - Powered by Gemini
                         </span>
-                        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+                        <h1 className="text-2xl md:text-3xl font-bold mb-3">
                             Experience <GradientText>RAG-Powered AI</GradientText>
                         </h1>
-                        <p className="text-lg text-[var(--text-secondary)]">
-                            See how our AI assistant reads context and provides intelligent,
-                            relevant responses. Try the hospital appointment booking simulation below.
+                        <p className="text-base text-[var(--text-secondary)]">
+                            See how our AI assistant reads context and provides intelligent responses.
                         </p>
                         {speechSupported && (
-                            <p className="text-sm text-[var(--accent-primary)] mt-2">
-                                🎤 Voice enabled! Click the microphone to speak, or toggle the speaker for audio responses.
+                            <p className="text-xs text-[var(--accent-primary)] mt-2">
+                                🎤 Voice enabled! Click the microphone to speak.
                             </p>
                         )}
                     </motion.div>
@@ -528,382 +527,384 @@ export default function DemoPage() {
             </section>
 
             {/* Demo Interface */}
-            <Section className="py-8">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    className="bg-[var(--bg-secondary)] border border-[var(--border-default)] rounded-2xl overflow-hidden shadow-2xl"
-                >
-                    {/* Demo Header */}
-                    <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border-default)] bg-[var(--bg-elevated)]">
-                        <div className="flex items-center gap-3">
-                            <div className="flex gap-1.5">
-                                <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                                <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                                <div className="w-3 h-3 rounded-full bg-green-500/80" />
+            <div className="flex-1 min-h-0 px-4 pb-4 overflow-hidden">
+                <div className="container mx-auto h-full flex items-center justify-center">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                        className="w-full max-w-7xl h-full max-h-[calc(100vh-200px)] bg-[var(--bg-secondary)] border border-[var(--border-default)] rounded-2xl overflow-hidden shadow-2xl flex flex-col"
+                    >
+                        {/* Demo Header */}
+                        <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border-default)] bg-[var(--bg-elevated)]">
+                            <div className="flex items-center gap-3">
+                                <div className="flex gap-1.5">
+                                    <div className="w-3 h-3 rounded-full bg-red-500/80" />
+                                    <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
+                                    <div className="w-3 h-3 rounded-full bg-green-500/80" />
+                                </div>
+                                <span className="text-sm font-medium">RAG Demo - Hospital Appointment System</span>
                             </div>
-                            <span className="text-sm font-medium">RAG Demo - Hospital Appointment System</span>
                         </div>
-                    </div>
 
-                    {/* Settings Panel */}
-                    <AnimatePresence>
-                        {showSettings && (
-                            <motion.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: "auto", opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                className="border-b border-[var(--border-subtle)] bg-[var(--bg-primary)] overflow-hidden"
-                            >
-                                <div className="p-4 space-y-4">
-                                    {/* Gemini API Configuration */}
-                                    <div className="space-y-3">
-                                        <div className="flex items-center justify-between">
-                                            <h3 className="text-sm font-semibold">Gemini AI Configuration</h3>
-                                            <div className="flex items-center gap-2">
-                                                {apiKeyStatus === "configured" && (
-                                                    <span className="text-xs text-green-500 flex items-center gap-1">
-                                                        <Check className="w-3 h-3" />
-                                                        Connected
-                                                    </span>
-                                                )}
-                                            </div>
-                                        </div>
-                                        <div className="flex gap-2">
-                                            <input
-                                                type="password"
-                                                value={apiKeyInput}
-                                                onChange={(e) => setApiKeyInput(e.target.value)}
-                                                placeholder="Enter your Gemini API key..."
-                                                className="flex-1 px-3 py-2 rounded-lg bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)]"
-                                            />
-                                        </div>
-                                        <p className="text-xs text-[var(--text-tertiary)]">
-                                            Get your API key from{" "}
-                                            <a
-                                                href="https://aistudio.google.com/app/apikey"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-[var(--accent-primary)] hover:underline"
-                                            >
-                                                Google AI Studio
-                                            </a>
-                                        </p>
-                                    </div>
-
-                                    {/* ElevenLabs Voice Configuration */}
-                                    <div className="pt-3 border-t border-[var(--border-subtle)] space-y-3">
-                                        <h3 className="text-sm font-semibold">ElevenLabs Voice (Optional)</h3>
-                                        <div className="flex gap-2">
-                                            <input
-                                                type="password"
-                                                value={elevenlabsKeyInput}
-                                                onChange={(e) => setElevenlabsKeyInput(e.target.value)}
-                                                placeholder="Enter your ElevenLabs API key..."
-                                                className="flex-1 px-3 py-2 rounded-lg bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)]"
-                                            />
-                                        </div>
-
-                                        {/* Voice Selection */}
-                                        <div>
-                                            <label className="text-xs text-[var(--text-tertiary)] mb-2 block">Voice Persona</label>
-                                            <select
-                                                value={selectedVoice}
-                                                onChange={(e) => handleVoiceChange(e.target.value)}
-                                                className="w-full px-3 py-2 rounded-lg bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-primary)]"
-                                            >
-                                                <option value="rachel">🎯 Rachel - Calm, Professional (Default)</option>
-                                                <option value="adam">💼 Adam - Clear, Authoritative</option>
-                                                <option value="bella">😊 Bella - Warm, Friendly</option>
-                                                <option value="antoni">🔊 Antoni - Deep, Confident</option>
-                                            </select>
-                                        </div>
-
-                                        <p className="text-xs text-[var(--text-tertiary)]">
-                                            Get your API key from{" "}
-                                            <a
-                                                href="https://elevenlabs.io/app/settings/api-keys"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-[var(--accent-primary)] hover:underline"
-                                            >
-                                                ElevenLabs
-                                            </a>
-                                            . Natural AI voices (Free: 10k chars/month, Fallback: browser TTS)
-                                        </p>
-                                    </div>
-
-                                    {/* Save Button */}
-                                    <div className="flex justify-end pt-2">
-                                        <Button size="sm" onClick={handleSaveApiKey}>
-                                            Save Configuration
-                                        </Button>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-
-                    {/* Error Banner */}
-                    <AnimatePresence>
-                        {errorMessage && (
-                            <motion.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: "auto", opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                className="border-b border-[var(--border-subtle)] bg-yellow-500/10 overflow-hidden"
-                            >
-                                <div className="p-3 flex items-center gap-2 text-sm text-yellow-500">
-                                    <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                                    <span className="flex-1">{errorMessage}</span>
-                                    <button
-                                        onClick={() => setErrorMessage(null)}
-                                        className="p-1 hover:bg-yellow-500/20 rounded"
-                                    >
-                                        <X className="w-3 h-3" />
-                                    </button>
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-
-                    {/* Split View */}
-                    <div className="grid lg:grid-cols-2 h-[600px]">
-                        {/* Context Panel */}
-                        <div className="border-r border-[var(--border-default)] flex flex-col h-full min-h-0">
-                            <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-default)] bg-[var(--bg-primary)]">
-                                <div className="flex items-center gap-2">
-                                    <FileText className="w-4 h-4 text-[var(--accent-primary)]" />
-                                    <span className="text-sm font-medium">Context Document</span>
-                                </div>
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => setIsEditingContext(!isEditingContext)}
+                        {/* Settings Panel */}
+                        <AnimatePresence>
+                            {showSettings && (
+                                <motion.div
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: "auto", opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                    className="border-b border-[var(--border-subtle)] bg-[var(--bg-primary)] overflow-hidden"
                                 >
-                                    <Edit3 className="w-4 h-4" />
-                                    {isEditingContext ? "Done" : "Edit"}
-                                </Button>
-                            </div>
-                            <div className="flex-1 overflow-auto p-4">
-                                {isEditingContext ? (
-                                    <textarea
-                                        value={context}
-                                        onChange={(e) => setContext(e.target.value)}
-                                        className="w-full h-full min-h-[500px] bg-[var(--bg-elevated)] border border-[var(--border-strong)] rounded-lg p-4 text-sm font-mono text-[var(--text-secondary)] focus:outline-none focus:border-[var(--accent-primary)] resize-none"
-                                        placeholder="Enter your context here..."
-                                    />
-                                ) : (
-                                    <div className="prose prose-invert prose-sm max-w-none">
-                                        <pre className="whitespace-pre-wrap text-sm text-[var(--text-secondary)] font-mono bg-transparent p-0">
-                                            {context}
-                                        </pre>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
+                                    <div className="p-4 space-y-4">
+                                        {/* Gemini API Configuration */}
+                                        <div className="space-y-3">
+                                            <div className="flex items-center justify-between">
+                                                <h3 className="text-sm font-semibold">Gemini AI Configuration</h3>
+                                                <div className="flex items-center gap-2">
+                                                    {apiKeyStatus === "configured" && (
+                                                        <span className="text-xs text-green-500 flex items-center gap-1">
+                                                            <Check className="w-3 h-3" />
+                                                            Connected
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div className="flex gap-2">
+                                                <input
+                                                    type="password"
+                                                    value={apiKeyInput}
+                                                    onChange={(e) => setApiKeyInput(e.target.value)}
+                                                    placeholder="Enter your Gemini API key..."
+                                                    className="flex-1 px-3 py-2 rounded-lg bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)]"
+                                                />
+                                            </div>
+                                            <p className="text-xs text-[var(--text-tertiary)]">
+                                                Get your API key from{" "}
+                                                <a
+                                                    href="https://aistudio.google.com/app/apikey"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-[var(--accent-primary)] hover:underline"
+                                                >
+                                                    Google AI Studio
+                                                </a>
+                                            </p>
+                                        </div>
 
-                        {/* Chat Panel */}
-                        <div className="flex flex-col h-full min-h-0">
-                            <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-default)] bg-[var(--bg-primary)]">
-                                <div className="flex items-center gap-2">
-                                    <Bot className="w-4 h-4 text-[var(--accent-primary)]" />
-                                    <span className="text-sm font-medium">AI Assistant</span>
-                                </div>
-                                <div className="flex items-center gap-1">
-                                    {speechSupported && (
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            onClick={toggleSpeech}
-                                            title={isSpeechEnabled ? "Disable voice responses" : "Enable voice responses"}
+                                        {/* ElevenLabs Voice Configuration */}
+                                        <div className="pt-3 border-t border-[var(--border-subtle)] space-y-3">
+                                            <h3 className="text-sm font-semibold">ElevenLabs Voice (Optional)</h3>
+                                            <div className="flex gap-2">
+                                                <input
+                                                    type="password"
+                                                    value={elevenlabsKeyInput}
+                                                    onChange={(e) => setElevenlabsKeyInput(e.target.value)}
+                                                    placeholder="Enter your ElevenLabs API key..."
+                                                    className="flex-1 px-3 py-2 rounded-lg bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)]"
+                                                />
+                                            </div>
+
+                                            {/* Voice Selection */}
+                                            <div>
+                                                <label className="text-xs text-[var(--text-tertiary)] mb-2 block">Voice Persona</label>
+                                                <select
+                                                    value={selectedVoice}
+                                                    onChange={(e) => handleVoiceChange(e.target.value)}
+                                                    className="w-full px-3 py-2 rounded-lg bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-primary)]"
+                                                >
+                                                    <option value="rachel">🎯 Rachel - Calm, Professional (Default)</option>
+                                                    <option value="adam">💼 Adam - Clear, Authoritative</option>
+                                                    <option value="bella">😊 Bella - Warm, Friendly</option>
+                                                    <option value="antoni">🔊 Antoni - Deep, Confident</option>
+                                                </select>
+                                            </div>
+
+                                            <p className="text-xs text-[var(--text-tertiary)]">
+                                                Get your API key from{" "}
+                                                <a
+                                                    href="https://elevenlabs.io/app/settings/api-keys"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-[var(--accent-primary)] hover:underline"
+                                                >
+                                                    ElevenLabs
+                                                </a>
+                                                . Natural AI voices (Free: 10k chars/month, Fallback: browser TTS)
+                                            </p>
+                                        </div>
+
+                                        {/* Save Button */}
+                                        <div className="flex justify-end pt-2">
+                                            <Button size="sm" onClick={handleSaveApiKey}>
+                                                Save Configuration
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+
+                        {/* Error Banner */}
+                        <AnimatePresence>
+                            {errorMessage && (
+                                <motion.div
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: "auto", opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                    className="border-b border-[var(--border-subtle)] bg-yellow-500/10 overflow-hidden"
+                                >
+                                    <div className="p-3 flex items-center gap-2 text-sm text-yellow-500">
+                                        <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                                        <span className="flex-1">{errorMessage}</span>
+                                        <button
+                                            onClick={() => setErrorMessage(null)}
+                                            className="p-1 hover:bg-yellow-500/20 rounded"
                                         >
-                                            {isSpeechEnabled ? (
-                                                <Volume2 className="w-4 h-4 text-[var(--accent-primary)]" />
-                                            ) : (
-                                                <VolumeX className="w-4 h-4" />
-                                            )}
-                                        </Button>
-                                    )}
+                                            <X className="w-3 h-3" />
+                                        </button>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+
+                        {/* Split View */}
+                        <div className="grid lg:grid-cols-2 flex-1 min-h-0">
+                            {/* Context Panel */}
+                            <div className="border-r border-[var(--border-default)] flex flex-col min-h-0 overflow-hidden">
+                                <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-default)] bg-[var(--bg-primary)]">
+                                    <div className="flex items-center gap-2">
+                                        <FileText className="w-4 h-4 text-[var(--accent-primary)]" />
+                                        <span className="text-sm font-medium">Context Document</span>
+                                    </div>
                                     <Button
                                         variant="ghost"
                                         size="sm"
-                                        onClick={() => setShowSettings(!showSettings)}
-                                        title="API Settings"
+                                        onClick={() => setIsEditingContext(!isEditingContext)}
                                     >
-                                        <Settings className="w-4 h-4" />
+                                        <Edit3 className="w-4 h-4" />
+                                        {isEditingContext ? "Done" : "Edit"}
                                     </Button>
-                                    <Button variant="ghost" size="sm" onClick={handleReset}>
-                                        <RefreshCw className="w-4 h-4" />
-                                    </Button>
+                                </div>
+                                <div className="flex-1 overflow-auto p-4">
+                                    {isEditingContext ? (
+                                        <textarea
+                                            value={context}
+                                            onChange={(e) => setContext(e.target.value)}
+                                            className="w-full h-full min-h-[500px] bg-[var(--bg-elevated)] border border-[var(--border-strong)] rounded-lg p-4 text-sm font-mono text-[var(--text-secondary)] focus:outline-none focus:border-[var(--accent-primary)] resize-none"
+                                            placeholder="Enter your context here..."
+                                        />
+                                    ) : (
+                                        <div className="prose prose-invert prose-sm max-w-none">
+                                            <pre className="whitespace-pre-wrap text-sm text-[var(--text-secondary)] font-mono bg-transparent p-0">
+                                                {context}
+                                            </pre>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
-                            {/* Messages */}
-                            <div className="flex-1 overflow-auto p-4 space-y-4">
-                                {messages.map((message) => (
-                                    <motion.div
-                                        key={message.id}
-                                        initial={{ opacity: 0, y: 10 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        className={`flex gap-3 ${message.role === "user" ? "flex-row-reverse" : ""}`}
-                                    >
-                                        <div
-                                            className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${message.role === "user"
-                                                ? "bg-[var(--accent-primary)]"
-                                                : "bg-[var(--accent-primary)]/20"
-                                                }`}
+                            {/* Chat Panel */}
+                            <div className="flex flex-col min-h-0 overflow-hidden">
+                                <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-default)] bg-[var(--bg-primary)]">
+                                    <div className="flex items-center gap-2">
+                                        <Bot className="w-4 h-4 text-[var(--accent-primary)]" />
+                                        <span className="text-sm font-medium">AI Assistant</span>
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                        {speechSupported && (
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={toggleSpeech}
+                                                title={isSpeechEnabled ? "Disable voice responses" : "Enable voice responses"}
+                                            >
+                                                {isSpeechEnabled ? (
+                                                    <Volume2 className="w-4 h-4 text-[var(--accent-primary)]" />
+                                                ) : (
+                                                    <VolumeX className="w-4 h-4" />
+                                                )}
+                                            </Button>
+                                        )}
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            onClick={() => setShowSettings(!showSettings)}
+                                            title="API Settings"
                                         >
-                                            {message.role === "user" ? (
-                                                <User className="w-4 h-4 text-white" />
-                                            ) : (
+                                            <Settings className="w-4 h-4" />
+                                        </Button>
+                                        <Button variant="ghost" size="sm" onClick={handleReset}>
+                                            <RefreshCw className="w-4 h-4" />
+                                        </Button>
+                                    </div>
+                                </div>
+
+                                {/* Messages */}
+                                <div className="flex-1 overflow-auto p-4 space-y-4">
+                                    {messages.map((message) => (
+                                        <motion.div
+                                            key={message.id}
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            className={`flex gap-3 ${message.role === "user" ? "flex-row-reverse" : ""}`}
+                                        >
+                                            <div
+                                                className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${message.role === "user"
+                                                    ? "bg-[var(--accent-primary)]"
+                                                    : "bg-[var(--accent-primary)]/20"
+                                                    }`}
+                                            >
+                                                {message.role === "user" ? (
+                                                    <User className="w-4 h-4 text-white" />
+                                                ) : (
+                                                    <Bot className="w-4 h-4 text-[var(--accent-primary)]" />
+                                                )}
+                                            </div>
+                                            <div
+                                                className={`max-w-[80%] p-3 rounded-2xl text-sm ${message.role === "user"
+                                                    ? "bg-[var(--accent-primary)] text-white rounded-br-sm"
+                                                    : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] rounded-bl-sm"
+                                                    }`}
+                                            >
+                                                <pre className="whitespace-pre-wrap font-sans">{message.content}</pre>
+                                                {message.role === "assistant" && message.content === "" && isStreaming && (
+                                                    <div className="flex gap-1">
+                                                        <span className="w-2 h-2 bg-[var(--text-tertiary)] rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                                                        <span className="w-2 h-2 bg-[var(--text-tertiary)] rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                                                        <span className="w-2 h-2 bg-[var(--text-tertiary)] rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </motion.div>
+                                    ))}
+
+                                    {isLoading && !isStreaming && (
+                                        <motion.div
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            className="flex gap-3"
+                                        >
+                                            <div className="w-8 h-8 rounded-full bg-[var(--accent-primary)]/20 flex items-center justify-center">
                                                 <Bot className="w-4 h-4 text-[var(--accent-primary)]" />
-                                            )}
-                                        </div>
-                                        <div
-                                            className={`max-w-[80%] p-3 rounded-2xl text-sm ${message.role === "user"
-                                                ? "bg-[var(--accent-primary)] text-white rounded-br-sm"
-                                                : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] rounded-bl-sm"
-                                                }`}
-                                        >
-                                            <pre className="whitespace-pre-wrap font-sans">{message.content}</pre>
-                                            {message.role === "assistant" && message.content === "" && isStreaming && (
+                                            </div>
+                                            <div className="bg-[var(--bg-elevated)] p-3 rounded-2xl rounded-bl-sm">
                                                 <div className="flex gap-1">
                                                     <span className="w-2 h-2 bg-[var(--text-tertiary)] rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
                                                     <span className="w-2 h-2 bg-[var(--text-tertiary)] rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
                                                     <span className="w-2 h-2 bg-[var(--text-tertiary)] rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
                                                 </div>
-                                            )}
-                                        </div>
-                                    </motion.div>
-                                ))}
-
-                                {isLoading && !isStreaming && (
-                                    <motion.div
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        className="flex gap-3"
-                                    >
-                                        <div className="w-8 h-8 rounded-full bg-[var(--accent-primary)]/20 flex items-center justify-center">
-                                            <Bot className="w-4 h-4 text-[var(--accent-primary)]" />
-                                        </div>
-                                        <div className="bg-[var(--bg-elevated)] p-3 rounded-2xl rounded-bl-sm">
-                                            <div className="flex gap-1">
-                                                <span className="w-2 h-2 bg-[var(--text-tertiary)] rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                                                <span className="w-2 h-2 bg-[var(--text-tertiary)] rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                                                <span className="w-2 h-2 bg-[var(--text-tertiary)] rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
                                             </div>
-                                        </div>
-                                    </motion.div>
-                                )}
-                                <div ref={messagesEndRef} />
-                            </div>
-
-                            {/* Suggested Actions */}
-                            {messages.length <= 1 && !isLoading && (
-                                <div className="px-4 pb-2">
-                                    <div className="flex flex-wrap gap-2">
-                                        {suggestedActions.map((action) => (
-                                            <button
-                                                key={action}
-                                                onClick={() => handleSend(action)}
-                                                className="px-3 py-1.5 text-xs rounded-full bg-[var(--bg-elevated)] border border-[var(--border-default)] text-[var(--text-secondary)] hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)] transition-colors"
-                                            >
-                                                {action}
-                                            </button>
-                                        ))}
-                                    </div>
+                                        </motion.div>
+                                    )}
+                                    <div ref={messagesEndRef} />
                                 </div>
-                            )}
 
-                            {/* Input */}
-                            <div className="p-4 border-t border-[var(--border-default)]">
-                                <form
-                                    onSubmit={(e) => {
-                                        e.preventDefault();
-                                        handleSend();
-                                    }}
-                                    className="flex gap-2"
-                                >
-                                    <input
-                                        type="text"
-                                        value={input}
-                                        onChange={(e) => setInput(e.target.value)}
-                                        placeholder={isListening ? "Listening..." : "Type your message..."}
-                                        className="flex-1 px-4 py-3 rounded-full bg-[var(--bg-elevated)] border border-[var(--border-strong)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)] transition-colors"
-                                        disabled={isLoading}
-                                    />
-                                    {speechSupported && (
-                                        <Button
-                                            type="button"
-                                            variant={isListening ? "primary" : "secondary"}
-                                            onClick={toggleListening}
+                                {/* Suggested Actions */}
+                                {messages.length <= 1 && !isLoading && (
+                                    <div className="px-4 pb-2">
+                                        <div className="flex flex-wrap gap-2">
+                                            {suggestedActions.map((action) => (
+                                                <button
+                                                    key={action}
+                                                    onClick={() => handleSend(action)}
+                                                    className="px-3 py-1.5 text-xs rounded-full bg-[var(--bg-elevated)] border border-[var(--border-default)] text-[var(--text-secondary)] hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)] transition-colors"
+                                                >
+                                                    {action}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Input */}
+                                <div className="p-4 border-t border-[var(--border-default)]">
+                                    <form
+                                        onSubmit={(e) => {
+                                            e.preventDefault();
+                                            handleSend();
+                                        }}
+                                        className="flex gap-2"
+                                    >
+                                        <input
+                                            type="text"
+                                            value={input}
+                                            onChange={(e) => setInput(e.target.value)}
+                                            placeholder={isListening ? "Listening..." : "Type your message..."}
+                                            className="flex-1 px-4 py-3 rounded-full bg-[var(--bg-elevated)] border border-[var(--border-strong)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)] transition-colors"
                                             disabled={isLoading}
-                                            title={isListening ? "Stop listening" : "Start voice input"}
-                                        >
-                                            {isListening ? (
-                                                <MicOff className="w-4 h-4" />
-                                            ) : (
-                                                <Mic className="w-4 h-4" />
-                                            )}
+                                        />
+                                        {speechSupported && (
+                                            <Button
+                                                type="button"
+                                                variant={isListening ? "primary" : "secondary"}
+                                                onClick={toggleListening}
+                                                disabled={isLoading}
+                                                title={isListening ? "Stop listening" : "Start voice input"}
+                                            >
+                                                {isListening ? (
+                                                    <MicOff className="w-4 h-4" />
+                                                ) : (
+                                                    <Mic className="w-4 h-4" />
+                                                )}
+                                            </Button>
+                                        )}
+                                        <Button type="submit" disabled={isLoading || !input.trim()}>
+                                            <Send className="w-4 h-4" />
                                         </Button>
-                                    )}
-                                    <Button type="submit" disabled={isLoading || !input.trim()}>
-                                        <Send className="w-4 h-4" />
-                                    </Button>
-                                </form>
-                                <p className="mt-2 text-xs text-[var(--text-tertiary)] text-center">
-                                    {isGeneratingVoice ? (
-                                        <span className="flex items-center justify-center gap-2 text-[var(--accent-primary)]">
-                                            <span className="inline-block w-2 h-2 bg-[var(--accent-primary)] rounded-full animate-pulse" />
-                                            Generating natural voice...
-                                        </span>
-                                    ) : apiKeyStatus === "configured" ? (
-                                        "✨ Powered by Gemini AI with RAG | 🎤 Natural voice by ElevenLabs"
-                                    ) : (
-                                        "Configure your Gemini API key in settings for AI-powered responses"
-                                    )}
-                                </p>
+                                    </form>
+                                    <p className="mt-2 text-xs text-[var(--text-tertiary)] text-center">
+                                        {isGeneratingVoice ? (
+                                            <span className="flex items-center justify-center gap-2 text-[var(--accent-primary)]">
+                                                <span className="inline-block w-2 h-2 bg-[var(--accent-primary)] rounded-full animate-pulse" />
+                                                Generating natural voice...
+                                            </span>
+                                        ) : apiKeyStatus === "configured" ? (
+                                            "✨ Powered by Gemini AI with RAG | 🎤 Natural voice by ElevenLabs"
+                                        ) : (
+                                            "Configure your Gemini API key in settings for AI-powered responses"
+                                        )}
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </motion.div>
-            </Section>
 
-            {/* How it Works */}
-            <Section>
-                <div className="max-w-3xl mx-auto text-center">
-                    <h2 className="text-2xl md:text-3xl font-bold mb-6">How RAG Works</h2>
-                    <div className="grid md:grid-cols-3 gap-6">
-                        {[
-                            {
-                                step: "1",
-                                title: "Context Loading",
-                                description: "The AI reads and indexes the context document (left panel) to understand available information.",
-                            },
-                            {
-                                step: "2",
-                                title: "Query Understanding",
-                                description: "When you ask a question, the AI analyzes your intent and retrieves relevant context.",
-                            },
-                            {
-                                step: "3",
-                                title: "Intelligent Response",
-                                description: "The AI generates accurate, contextual responses based on the retrieved information.",
-                            },
-                        ].map((item) => (
-                            <div key={item.step} className="text-center">
-                                <div className="w-10 h-10 rounded-full bg-[var(--accent-primary)] text-white font-bold flex items-center justify-center mx-auto mb-3">
-                                    {item.step}
+                        {/* How it Works - Inside Demo Container */}
+                        <div className="border-t border-[var(--border-default)] bg-[var(--bg-primary)] px-6 py-4">
+                            <div className="text-center">
+                                <h3 className="text-lg font-bold mb-3">How RAG Works</h3>
+                                <div className="grid grid-cols-3 gap-4 text-xs">
+                                    {[
+                                        {
+                                            step: "1",
+                                            title: "Context Loading",
+                                            description: "AI reads the context document",
+                                        },
+                                        {
+                                            step: "2",
+                                            title: "Query Understanding",
+                                            description: "Analyzes your question",
+                                        },
+                                        {
+                                            step: "3",
+                                            title: "Intelligent Response",
+                                            description: "Generates accurate answers",
+                                        },
+                                    ].map((item) => (
+                                        <div key={item.step} className="text-center">
+                                            <div className="w-6 h-6 rounded-full bg-[var(--accent-primary)] text-white text-xs font-bold flex items-center justify-center mx-auto mb-1">
+                                                {item.step}
+                                            </div>
+                                            <h4 className="font-semibold mb-1">{item.title}</h4>
+                                            <p className="text-[var(--text-secondary)]">{item.description}</p>
+                                        </div>
+                                    ))}
                                 </div>
-                                <h3 className="font-semibold mb-2">{item.title}</h3>
-                                <p className="text-sm text-[var(--text-secondary)]">{item.description}</p>
                             </div>
-                        ))}
-                    </div>
+                        </div>
+                    </motion.div>
                 </div>
-            </Section>
-        </>
+            </div>
+        </div>
     );
 }
