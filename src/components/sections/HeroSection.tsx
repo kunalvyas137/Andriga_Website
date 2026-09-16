@@ -4,21 +4,21 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Button from "@/components/ui/Button";
 import GradientText from "@/components/ui/GradientText";
-import { ArrowRight, Play, Sparkles } from "lucide-react";
+import { ArrowRight, Bot, Globe2, Handshake, PiggyBank, Play, Smile, Sparkles } from "lucide-react";
 
 export default function HeroSection() {
     return (
-        <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+        <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-16">
             {/* Hero Background Image */}
             <div className="absolute inset-0 z-0">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                     src="/hero-banner.png"
                     alt="AI Technology Background"
-                    className="w-full h-full object-cover opacity-90"
+                    className="w-full h-full object-cover opacity-80"
                 />
                 {/* Overlay for better text readability */}
-                <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-primary)]/70 via-[var(--bg-primary)]/50 to-[var(--bg-primary)]" />
+                <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-primary)]/80 via-[var(--bg-primary)]/60 to-[var(--bg-primary)]" />
             </div>
 
             {/* Content */}
@@ -32,7 +32,7 @@ export default function HeroSection() {
                     >
                         <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/20 text-sm text-[var(--accent-primary)] mb-6 backdrop-blur-sm">
                             <Sparkles className="w-4 h-4" />
-                            <span>Powered by Advanced AI Technology</span>
+                            <span>This website is powered by AI</span>
                         </span>
                     </motion.div>
 
@@ -41,29 +41,25 @@ export default function HeroSection() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.1 }}
-                        className="text-4xl md:text-5xl lg:text-7xl font-bold mb-6 leading-tight"
+                        className="text-5xl md:text-6xl lg:text-8xl font-extrabold mb-8 leading-[1.1] tracking-tight"
+                        style={{ letterSpacing: '-0.02em' }}
                     >
                         Transform Your Business with{" "}
                         <GradientText animate>Intelligent AI</GradientText>
                     </motion.h1>
-
-                    {/* Subtitle */}
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.2 }}
-                        className="text-lg md:text-xl text-[var(--text-secondary)] mb-10 max-w-2xl mx-auto"
+                        className="text-xl md:text-2xl text-[var(--text-secondary)] mb-10 max-w-3xl mx-auto leading-relaxed font-light"
                     >
-                        ANDRIGA delivers cutting-edge AI solutions for small to medium-sized businesses.
-                        Empower your employees and customers with intelligent automation that drives real results.
+                        Empower your organization with cutting-edge AI solutions that drive efficiency, innovation, and measurable growth.
                     </motion.p>
-
-                    {/* CTA Buttons */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.3 }}
-                        className="flex flex-col sm:flex-row items-center justify-center gap-4"
+                        transition={{ duration: 0.5, delay: 0.35 }}
+                        className="flex flex-col sm:flex-row items-center justify-center gap-5"
                     >
                         <Link href="/contact">
                             <Button size="lg" className="w-full sm:w-auto">
@@ -86,13 +82,25 @@ export default function HeroSection() {
                         transition={{ duration: 0.5, delay: 0.5 }}
                         className="mt-16 pt-10 border-t border-[var(--border-subtle)]"
                     >
-                        <p className="text-sm text-[var(--text-tertiary)] mb-6">
-                            Trusted by innovative companies worldwide
+                        <p className="mx-auto mb-8 max-w-3xl text-lg md:text-xl leading-relaxed text-[var(--text-secondary)] text-center font-light">
+                            Partner with us to design, develop, deploy, and maintain end-to-end custom software
+                            solutions tailored to your business needs. We also serve as a trusted partner for your
+                            ongoing technology and service requirements.
                         </p>
-                        <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12 opacity-50">
-                            {["TechCorp", "InnovateCo", "FutureLabs", "DataFlow", "SmartSys"].map((company) => (
-                                <span key={company} className="text-lg font-semibold text-[var(--text-tertiary)]">
-                                    {company}
+                        <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12 opacity-60">
+                            {[
+                                { label: "Global Expertise", Icon: Globe2 },
+                                { label: "Cost Advantage", Icon: PiggyBank },
+                                { label: "Intelligent Apps", Icon: Bot },
+                                { label: "Happy Clients", Icon: Smile },
+                                { label: "One Stop Tech Partner", Icon: Handshake },
+                            ].map(({ label, Icon }) => (
+                                <span
+                                    key={label}
+                                    className="inline-flex items-center gap-2 text-lg font-semibold text-[var(--text-tertiary)]"
+                                >
+                                    <Icon className="h-5 w-5 text-[var(--accent-primary)]" aria-hidden />
+                                    <span>{label}</span>
                                 </span>
                             ))}
                         </div>

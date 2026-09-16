@@ -5,120 +5,218 @@ import { motion, AnimatePresence } from "framer-motion";
 import Section from "@/components/ui/Section";
 import Button from "@/components/ui/Button";
 import GradientText from "@/components/ui/GradientText";
-import { Bot, User, Send, RefreshCw, FileText, Edit3, Sparkles, Mic, MicOff, Volume2, VolumeX, Settings, X, Check, AlertCircle } from "lucide-react";
+import {
+    Bot, User, Send, RefreshCw, FileText, Edit3, Sparkles, Mic, MicOff,
+    Volume2, VolumeX, Radio, Brain, MessageSquare, GitBranch, Zap, Network,
+    CheckCircle, XCircle, Clock, Loader2, TrendingUp
+} from "lucide-react";
+import { WorkflowStep, ContextChunk } from "@/types/demo";
+import { useDeepgramVoice } from "@/hooks/useDeepgramVoice";
 
-// Hospital context data
-const defaultContext = `# City Health Medical Center
+// Hospital Management context for AI demo
+const defaultContext = `# CityMed Hospital - Patient & Admin Support
 
-## Available Doctors
+## Appointments
 
-### Dr. Sarah Smith - Cardiologist
-- **Specialization:** Heart health, cardiovascular diseases
-- **Available Days:** Monday, Wednesday, Friday
-- **Available Slots:** 9:00 AM, 10:00 AM, 2:00 PM, 4:00 PM
-- **Consultation Fee:** $150
+### How do I book an appointment?
+Call our helpline at +91-98765-43210, visit the hospital reception (OPD Block, Ground Floor), or use the CityMed Patient Portal at portal.citymed.in. Online bookings are available 24/7. Walk-ins are accepted subject to doctor availability.
 
-### Dr. James Johnson - Neurologist
-- **Specialization:** Brain and nervous system disorders
-- **Available Days:** Tuesday, Thursday
-- **Available Slots:** 10:00 AM, 11:00 AM, 3:00 PM
-- **Consultation Fee:** $175
+### What are the OPD timings?
+- General OPD: Monday to Saturday, 8:00 AM – 2:00 PM
+- Evening OPD: Monday to Friday, 5:00 PM – 8:00 PM
+- Emergency: Open 24 hours, 7 days a week
+- Sundays: Emergency and ICU services only
 
-### Dr. Emily Chen - Pediatrician
-- **Specialization:** Child healthcare, vaccinations
-- **Available Days:** Monday, Tuesday, Wednesday
-- **Available Slots:** 9:00 AM, 11:00 AM, 2:00 PM, 4:00 PM
-- **Consultation Fee:** $120
+### Can I reschedule or cancel my appointment?
+Yes. Call +91-98765-43210 or log in to the Patient Portal at least 2 hours before your scheduled time. Cancellations made less than 1 hour before the appointment may incur a ₹200 administrative fee.
 
-### Dr. Michael Brown - Orthopedic Surgeon
-- **Specialization:** Bone and joint issues, sports injuries
-- **Available Days:** Wednesday, Thursday, Friday
-- **Available Slots:** 10:00 AM, 1:00 PM, 4:00 PM
-- **Consultation Fee:** $200
+### How do I book a specialist consultation?
+Specialist consultations require a referral from a General Physician in most cases. However, direct appointments with Cardiologists, Orthopedic Surgeons, and Dermatologists can be booked directly via the portal or helpline.
 
-### Dr. Lisa Davis - Dermatologist
-- **Specialization:** Skin conditions, cosmetic dermatology
-- **Available Days:** Monday, Friday
-- **Available Slots:** 9:00 AM, 12:00 PM, 3:00 PM
-- **Consultation Fee:** $130
+### Is there a token system for OPD?
+Yes. Tokens are issued from the OPD registration counter. Online bookings receive a pre-assigned token number via SMS one hour before the scheduled time, reducing waiting time significantly.
 
-## Hospital Services
-- Emergency Care (24/7)
-- Consultation Booking
-- Follow-up Appointments
-- Lab Tests & Diagnostics
-- Pharmacy Services
+## Doctors & Departments
 
-## Booking Policy
-- Appointments can be booked up to 2 weeks in advance
-- Cancellations must be made 24 hours before the appointment
-- New patients need to arrive 15 minutes early for registration
+### Which specialties are available at CityMed?
+CityMed has 28 specialty departments including:
+- Cardiology & Cardiac Surgery
+- Orthopedics & Joint Replacement
+- Neurology & Neurosurgery
+- Oncology & Cancer Care
+- Obstetrics & Gynecology (OB-GYN)
+- Pediatrics & Neonatology
+- Gastroenterology
+- Pulmonology & Chest Medicine
+- Nephrology & Urology
+- Dermatology & Plastic Surgery
+- ENT (Ear, Nose, Throat)
+- Ophthalmology
+- General Medicine & Internal Medicine
+- Psychiatry & Mental Health
+- Endocrinology & Diabetes
+
+### Who are the senior consultants available?
+- **Dr. Rajesh Kumar** – Senior Cardiologist (MBBS, MD, DM Cardiology) | Mon, Wed, Fri: 10 AM–1 PM
+- **Dr. Priya Sharma** – Chief Gynecologist (MBBS, MS OBG) | Tue, Thu, Sat: 9 AM–12 PM
+- **Dr. Anil Mehta** – HOD Orthopedics (MBBS, MS Ortho, FRCS) | Mon–Fri: 11 AM–2 PM
+- **Dr. Sunita Rao** – Senior Neurologist (MBBS, MD, DM Neurology) | Mon, Wed: 3 PM–6 PM
+- **Dr. Vikram Patel** – Oncology Consultant (MBBS, MD, DNB Oncology) | Tue, Thu: 2 PM–5 PM
+- **Dr. Meena Joshi** – Pediatrician & Neonatologist (MBBS, MD Pediatrics) | Daily: 9 AM–1 PM
+
+### What is the consultation fee for doctors?
+- General Physician: ₹300
+- Specialist Consultant: ₹600 – ₹1,000
+- Senior Consultant: ₹1,200 – ₹2,000
+- Super-Specialist / HOD: ₹2,500
+- Emergency Consultation: ₹500 (additional to regular fees)
+
+### Are second opinions available?
+Yes, CityMed offers second opinion consultations. You may bring previous reports, scans, and prescriptions. A dedicated second-opinion clinic runs every Saturday from 10 AM to 1 PM.
+
+## Diagnostics & Lab
+
+### What diagnostic services does CityMed offer?
+- Pathology & Blood Tests (NABL Accredited Lab)
+- Digital X-Ray & Fluoroscopy
+- MRI (1.5T & 3T)
+- CT Scan (128-slice)
+- 2D Echo & Stress Echo
+- Ultrasound & Color Doppler
+- PET-CT Scan
+- Mammography & DEXA Scan
+- Pulmonary Function Test (PFT)
+- Electroencephalography (EEG)
+
+### What are lab timings and where are reports collected?
+- Sample collection: Monday to Saturday, 6:30 AM – 12:00 PM (fasting samples preferred before 9 AM)
+- Emergency lab: 24 hours
+- Reports available via SMS link, Patient Portal, or Lab counter (Block B, Ground Floor)
+- Routine reports: Within 6–24 hours
+- STAT/Emergency reports: Within 1–2 hours
+
+### Can I get home sample collection?
+Yes, home sample collection is available within a 10 km radius of the hospital. Book via the Patient Portal or call +91-98765-43220. A technician visits between 6:30 AM and 10 AM. Additional charges: ₹150 within 5 km, ₹250 for 5–10 km.
+
+## Billing & Insurance
+
+### What payment modes are accepted?
+CityMed accepts:
+- Cash at all billing counters
+- UPI (Google Pay, PhonePe, Paytm, BHIM)
+- Credit/Debit Cards (Visa, Mastercard, RuPay)
+- Net Banking
+- Corporate credit letters (for empanelled companies)
+
+### Which insurance companies are empanelled with CityMed?
+CityMed is empanelled with 45+ insurance providers including:
+- Star Health Insurance
+- HDFC ERGO Health
+- Bajaj Allianz Health
+- Niva Bupa (formerly Max Bupa)
+- ICICI Lombard
+- United India Insurance
+- New India Assurance
+- Government schemes: PMJAY (Ayushman Bharat), CGHS, ESIC, State Government schemes
+
+### How does cashless insurance work at CityMed?
+1. Inform the Insurance Desk (Main Reception, Ground Floor) at the time of admission
+2. Submit your insurance card, government-issued ID, and doctor's referral letter
+3. CityMed's TPA team initiates pre-authorization with your insurer
+4. Approval typically takes 2–4 hours for planned admissions
+5. Emergency cashless processing: 30–60 minutes
+
+### What if my insurance claim is denied?
+Our billing team will help you with reimbursement paperwork including itemized bills, discharge summary, and diagnostic reports. Contact the billing helpdesk at billing@citymed.in or +91-98765-43230.
+
+### Do you have installment/EMI options?
+Yes, CityMed offers No-Cost EMI through HDFC Bank, ICICI Bank, and Bajaj Finserv for bills above ₹10,000. Speak to the billing counter for eligibility.
+
+## Admissions & Wards
+
+### What types of rooms are available?
+- **General Ward:** ₹1,500/day (6–8 beds per room)
+- **Twin Sharing:** ₹3,000/day (2 beds per room, attached bathroom)
+- **Single Private Room:** ₹5,500/day (AC, TV, sofa for attendant)
+- **Deluxe Room:** ₹8,500/day (AC, smart TV, mini-fridge, attendant bed)
+- **Suite:** ₹15,000/day (living area, kitchenette, meals included)
+- **ICU:** Rates vary by acuity (₹8,000–₹18,000/day)
+
+### What is the admission procedure?
+1. Obtain an admission note from the treating doctor
+2. Visit the Admission Desk (Main Reception)
+3. Submit ID proof, insurance documents (if applicable), and doctor's note
+4. Deposit advance payment (₹10,000 for general ward, ₹25,000+ for ICU/Surgery)
+5. Room allocation is done based on availability and doctor preference
+
+### Are attendants allowed to stay?
+One attendant per patient is allowed. Attendant passes are issued from the nursing station. Attendants must follow hospital visiting hours and hygiene protocols.
+
+### What are visiting hours?
+- ICU & HDU: 12:00 PM – 1:00 PM and 6:00 PM – 7:00 PM only
+- General Wards & Private Rooms: 9:00 AM – 12:00 PM and 4:00 PM – 8:00 PM
+- COVID/Isolation Wards: No visitors (video calling facilitated by nursing staff)
+
+## Emergency & Ambulance
+
+### What emergency services are available?
+CityMed's Emergency department operates 24/7 with:
+- Trauma care (Level II Trauma Center)
+- Cardiac catheterization lab (24/7 STEMI protocol)
+- Emergency surgery OT
+- Stroke management unit
+- Pediatric emergency
+- Poison control and toxicology
+
+### How do I call an ambulance?
+Dial **112** (National Emergency) or CityMed's direct ambulance line **+91-98765-43200**. ALS (Advanced Life Support) and BLS (Basic Life Support) ambulances are available. GPS tracking via the CityMed app.
+
+### What is the response time for ambulances?
+Average response time within city limits: 8–12 minutes. The ambulance team provides telephonic first-aid guidance while en route.
+
+## Patient Services & Facilities
+
+### What amenities does CityMed provide?
+- 24-hour pharmacy (in-hospital)
+- Cafeteria on Ground Floor and 4th Floor (8 AM – 10 PM)
+- Free Wi-Fi throughout the campus
+- Wheelchair and stretcher services (free of charge)
+- Interpretation services for non-English/non-Hindi speakers
+- Chapel/Prayer room (Basement Level)
+- Patient counselling and social work services
+- Parking (free for the first 30 minutes, ₹30/hour thereafter)
+
+### How do I access my medical records?
+- Request at the Medical Records Department (Block C, 1st Floor) with valid ID
+- Records available within 3 working days
+- Digital records downloadable via Patient Portal within 24 hours of discharge
+- Medical records are retained for 7 years as per regulations
+
+### Who do I contact for feedback or complaints?
+Email: feedback@citymed.in
+Patient Relations Desk: Main lobby, Ground Floor (9 AM – 6 PM)
+Phone: +91-98765-43240
+Complaints are acknowledged within 24 hours and resolved within 7 working days.
 `;
+
 
 interface Message {
     id: string;
     role: "user" | "assistant";
     content: string;
+    workflowSteps?: WorkflowStep[];
+    sourcesUsed?: ContextChunk[];
 }
 
 const initialMessages: Message[] = [
     {
         id: "1",
         role: "assistant",
-        content: "Hello! I'm your AI assistant for City Health Medical Center. I can help you with:\n\n• Finding a doctor based on your needs\n• Checking doctor availability\n• Booking appointments\n• Information about our services\n\nHow can I assist you today?",
+        content: "Hello! I'm CityMed's AI Patient Support Assistant, powered by **Gemini 2.0 with RAG**. I can help you with:\n\n• Booking & managing appointments\n• Doctor schedules and consultation fees\n• Diagnostics, lab tests & reports\n• Billing, insurance & cashless admissions\n• Room availability and ward information\n• Emergency services and ambulance\n\nHow can I assist you today?",
     },
 ];
 
-// Suggested quick actions
-const suggestedActions = [
-    "Find a cardiologist",
-    "Check availability",
-    "Book an appointment",
-    "Show all doctors"
-];
-
-// Type declarations for Web Speech API
-interface SpeechRecognitionEvent extends Event {
-    results: SpeechRecognitionResultList;
-    resultIndex: number;
-}
-
-interface SpeechRecognitionResultList {
-    length: number;
-    item(index: number): SpeechRecognitionResult;
-    [index: number]: SpeechRecognitionResult;
-}
-
-interface SpeechRecognitionResult {
-    isFinal: boolean;
-    length: number;
-    item(index: number): SpeechRecognitionAlternative;
-    [index: number]: SpeechRecognitionAlternative;
-}
-
-interface SpeechRecognitionAlternative {
-    transcript: string;
-    confidence: number;
-}
-
-interface SpeechRecognition extends EventTarget {
-    continuous: boolean;
-    interimResults: boolean;
-    lang: string;
-    onresult: ((event: SpeechRecognitionEvent) => void) | null;
-    onerror: ((event: Event) => void) | null;
-    onend: (() => void) | null;
-    start(): void;
-    stop(): void;
-    abort(): void;
-}
-
-declare global {
-    interface Window {
-        SpeechRecognition: new () => SpeechRecognition;
-        webkitSpeechRecognition: new () => SpeechRecognition;
-    }
-}
+// Deepgram-powered voice agent — no browser Web Speech API needed
 
 export default function DemoPage() {
     const [context, setContext] = useState(defaultContext);
@@ -126,545 +224,480 @@ export default function DemoPage() {
     const [messages, setMessages] = useState<Message[]>(initialMessages);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const [isStreaming, setIsStreaming] = useState(false);
-    const [isListening, setIsListening] = useState(false);
     const [isSpeechEnabled, setIsSpeechEnabled] = useState(true);
-    const [speechSupported, setSpeechSupported] = useState(false);
-    const [showSettings, setShowSettings] = useState(false);
-    const [apiKeyInput, setApiKeyInput] = useState("");
-    const [elevenlabsKeyInput, setElevenlabsKeyInput] = useState("");
-    const [selectedVoice, setSelectedVoice] = useState("rachel");
-    const [isGeneratingVoice, setIsGeneratingVoice] = useState(false);
-    const [apiKeyStatus, setApiKeyStatus] = useState<"unconfigured" | "configured" | "error">("unconfigured");
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [currentWorkflow, setCurrentWorkflow] = useState<WorkflowStep[]>([]);
+    const [highlightedChunks, setHighlightedChunks] = useState<ContextChunk[]>([]);
+    const [fallbackMode, setFallbackMode] = useState(false);
+
+    // Voice Bot Mode states
+    const [voiceBotMode, setVoiceBotMode] = useState(false);
+    const [conversationState, setConversationState] = useState<'idle' | 'listening' | 'processing' | 'speaking' | 'greeting'>('idle');
+    const [interimTranscript, setInterimTranscript] = useState("");
+
+    // Start Conversation Overlay states
+    const [showStartOverlay, setShowStartOverlay] = useState(true);
+    const [conversationStarted, setConversationStarted] = useState(false);
+
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    const recognitionRef = useRef<SpeechRecognition | null>(null);
-    const streamingMessageRef = useRef<string>("");
-    const audioRef = useRef<HTMLAudioElement | null>(null);
+    const voiceBotModeRef = useRef(voiceBotMode);
+    const conversationStateRef = useRef(conversationState);
+    const isVoiceBotActiveRef = useRef(false); // passed to hook for auto-reconnect
 
-    // Load API keys and voice preference from localStorage on mount
-    useEffect(() => {
-        const savedKey = localStorage.getItem("gemini_api_key");
-        if (savedKey) {
-            setApiKeyInput(savedKey);
-            setApiKeyStatus("configured");
-        }
-        const savedElevenlabsKey = localStorage.getItem("elevenlabs_api_key");
-        if (savedElevenlabsKey) {
-            setElevenlabsKeyInput(savedElevenlabsKey);
-        }
-        const savedVoice = localStorage.getItem("selected_voice");
-        if (savedVoice) {
-            setSelectedVoice(savedVoice);
-        }
-    }, []);
+    // Keep refs in sync for use inside closures
+    useEffect(() => { voiceBotModeRef.current = voiceBotMode; isVoiceBotActiveRef.current = voiceBotMode; }, [voiceBotMode]);
+    useEffect(() => { conversationStateRef.current = conversationState; }, [conversationState]);
 
-    // Check for speech support on mount
-    useEffect(() => {
-        const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
-        setSpeechSupported(!!SpeechRecognitionAPI && !!window.speechSynthesis);
-    }, []);
+    // Deepgram voice hook — handles STT WebSocket + TTS AudioContext
+    const {
+        isListening,
+        deepgramReady,
+        startListening,
+        stopListening,
+        speak,
+        stopSpeaking,
+    } = useDeepgramVoice({
+        onFinalTranscript: useCallback((text: string) => {
+            if (text.trim()) handleSendRef.current(text);
+        }, []),
+        onInterimTranscript: useCallback((text: string) => {
+            setInterimTranscript(text);
+            setInput(text);
+        }, []),
+        onStateChange: useCallback((state) => {
+            setConversationState(state);
+        }, []),
+        isVoiceBotActiveRef,
+    });
+
+    // Use a ref for handleSend to avoid stale closures in the hook callbacks
+    const handleSendRef = useRef<(msg?: string) => void>(() => { });
 
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        messagesEndRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest",
+            inline: "nearest"
+        });
     };
 
     useEffect(() => {
         scrollToBottom();
-    }, [messages, isStreaming]);
+    }, [messages]);
 
-    // Save API keys
-    const handleSaveApiKey = () => {
-        if (apiKeyInput.trim()) {
-            localStorage.setItem("gemini_api_key", apiKeyInput.trim());
-            setApiKeyStatus("configured");
-        }
-        if (elevenlabsKeyInput.trim()) {
-            localStorage.setItem("elevenlabs_api_key", elevenlabsKeyInput.trim());
-        }
-        setShowSettings(false);
-    };
-
-    // Save voice preference
-    const handleVoiceChange = (voice: string) => {
-        setSelectedVoice(voice);
-        localStorage.setItem("selected_voice", voice);
-    };
-
-    // Text-to-Speech function with ElevenLabs
-    const speakText = useCallback(async (text: string) => {
-        if (!isSpeechEnabled) return;
-
-        // Clean markdown formatting for better speech
-        const cleanText = text
-            .replace(/\*\*/g, "")
-            .replace(/\*/g, "")
-            .replace(/•/g, "")
-            .replace(/\n/g, " ")
-            .replace(/\s+/g, " ")
-            .trim();
-
-        setIsGeneratingVoice(true);
-
-        try {
-            // Try ElevenLabs first
-            const response = await fetch("/api/voice", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    text: cleanText,
-                    voice: selectedVoice,
-                }),
-            });
-
-            const contentType = response.headers.get("content-type");
-
-            if (contentType?.includes("audio/mpeg")) {
-                // Successfully got audio from ElevenLabs
-                const audioBlob = await response.blob();
-                const audioUrl = URL.createObjectURL(audioBlob);
-
-                if (audioRef.current) {
-                    audioRef.current.pause();
-                }
-
-                const audio = new Audio(audioUrl);
-                audioRef.current = audio;
-
-                audio.onended = () => {
-                    URL.revokeObjectURL(audioUrl);
-                    setIsGeneratingVoice(false);
-                };
-
-                audio.onerror = () => {
-                    setIsGeneratingVoice(false);
-                };
-
-                await audio.play();
-            } else {
-                // Fallback to browser TTS
-                const data = await response.json();
-                if (data.fallback && window.speechSynthesis) {
-                    window.speechSynthesis.cancel();
-                    const utterance = new SpeechSynthesisUtterance(cleanText);
-                    utterance.rate = 1;
-                    utterance.pitch = 1;
-                    utterance.volume = 1;
-                    utterance.onend = () => setIsGeneratingVoice(false);
-                    window.speechSynthesis.speak(utterance);
-                } else {
-                    setIsGeneratingVoice(false);
-                }
-            }
-        } catch (error) {
-            console.error("Voice synthesis error:", error);
-            // Fallback to browser TTS on error
-            if (window.speechSynthesis) {
-                window.speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(cleanText);
-                utterance.rate = 1;
-                utterance.pitch = 1;
-                utterance.volume = 1;
-                utterance.onend = () => setIsGeneratingVoice(false);
-                window.speechSynthesis.speak(utterance);
-            } else {
-                setIsGeneratingVoice(false);
-            }
-        }
-    }, [isSpeechEnabled, selectedVoice]);
-
-    // Speech-to-Text function
-    const toggleListening = useCallback(() => {
-        if (!speechSupported) return;
-
-        if (isListening) {
-            recognitionRef.current?.stop();
-            setIsListening(false);
+    // Speak text using Deepgram Aura TTS (with speech enabled toggle)
+    const speakText = useCallback((text: string, onComplete?: () => void) => {
+        if (!isSpeechEnabled) {
+            onComplete?.();
             return;
         }
+        speak(text, onComplete);
+    }, [isSpeechEnabled, speak]);
 
-        const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (!SpeechRecognitionAPI) return;
+    // Toggle listening (for manual mic button in text mode)
+    const toggleListening = useCallback(() => {
+        if (isListening) {
+            stopListening();
+        } else {
+            startListening();
+        }
+    }, [isListening, startListening, stopListening]);
 
-        const recognition = new SpeechRecognitionAPI();
-        recognition.continuous = false;
-        recognition.interimResults = true;
-        recognition.lang = "en-US";
-
-        recognition.onresult = (event: SpeechRecognitionEvent) => {
-            const transcript = Array.from(event.results)
-                .map((result) => result[0].transcript)
-                .join("");
-            setInput(transcript);
-        };
-
-        recognition.onerror = () => {
-            setIsListening(false);
-        };
-
-        recognition.onend = () => {
-            setIsListening(false);
-        };
-
-        recognitionRef.current = recognition;
-        recognition.start();
-        setIsListening(true);
-    }, [isListening, speechSupported]);
-
-    const handleSend = async (messageText?: string) => {
-        const textToSend = messageText || input.trim();
-        if (!textToSend || isLoading) return;
+    const handleSend = useCallback(async (messageOverride?: string) => {
+        const messageToSend = messageOverride || input.trim();
+        if (!messageToSend || isLoading) return;
 
         const userMessage: Message = {
             id: Date.now().toString(),
             role: "user",
-            content: textToSend,
+            content: messageToSend,
         };
 
         setMessages((prev) => [...prev, userMessage]);
         setInput("");
+        setInterimTranscript("");
         setIsLoading(true);
-        setErrorMessage(null);
-        streamingMessageRef.current = "";
+        setCurrentWorkflow([]);
+        setHighlightedChunks([]);
 
-        // Create placeholder for streaming message
-        const assistantMessageId = (Date.now() + 1).toString();
-        setMessages((prev) => [
-            ...prev,
-            {
-                id: assistantMessageId,
-                role: "assistant",
-                content: "",
-            },
-        ]);
-        setIsStreaming(true);
+        if (voiceBotModeRef.current) {
+            setConversationState('processing');
+            stopListening();
+        }
 
         try {
-            // Get conversation history (exclude the current streaming message)
-            const history = messages.map((msg) => ({
-                role: msg.role,
-                content: msg.content,
-            }));
+            const history = messages
+                .filter(m => m.id !== userMessage.id)
+                .map(m => ({ role: m.role, content: m.content }));
 
-            console.log("📤 Sending to API:");
-            console.log("  Message:", textToSend);
-            console.log("  History:", history.length, "messages");
-            history.forEach((msg, idx) => {
-                console.log(`    ${idx + 1}. [${msg.role}]: "${msg.content.substring(0, 50)}..."`);
-            });
-
-            const response = await fetch("/api/chat", {
+            // ── Streaming SSE fetch ──────────────────────────────────────────
+            const response = await fetch("/api/chat-stream", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    message: textToSend,
-                    context: context,
-                    history: history,
-                }),
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: messageToSend, context, history }),
             });
 
-            // Check if response is a stream
-            const contentType = response.headers.get("content-type");
+            if (!response.ok || !response.body) throw new Error(`Server error: ${response.status}`);
 
-            if (contentType?.includes("text/event-stream")) {
-                // Handle streaming response
-                const reader = response.body?.getReader();
-                const decoder = new TextDecoder();
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
 
-                if (!reader) throw new Error("No reader available");
+            let fullText = "";
+            let sentenceBuffer = "";
+            let firstSentenceSpoken = false;
+            const sentenceEnd = /[.!?][)\s"']*/;
 
-                let fullResponse = "";
+            // ── Sequential TTS queue ─────────────────────────────────────────
+            // Each item plays only AFTER the previous onended fires, preventing
+            // concurrent TTS calls that would stop each other mid-playback.
+            const ttsQueue: string[] = [];
+            let ttsPlaying = false;
+            let allEnqueued = false;
 
-                while (true) {
-                    const { done, value } = await reader.read();
-                    if (done) break;
+            const restartListening = () => {
+                if (voiceBotModeRef.current) setTimeout(() => startListening(), 300);
+            };
 
-                    const chunk = decoder.decode(value);
-                    const lines = chunk.split("\n");
+            const flushTTSQueue = () => {
+                if (ttsPlaying || ttsQueue.length === 0) return;
+                const text = ttsQueue.shift()!;
+                ttsPlaying = true;
+                speakText(text, () => {
+                    ttsPlaying = false;
+                    if (ttsQueue.length > 0) {
+                        flushTTSQueue();           // chain to next item
+                    } else if (allEnqueued) {
+                        restartListening();        // all done, start mic
+                    }
+                    // else: more items still incoming from the stream
+                });
+            };
 
-                    for (const line of lines) {
-                        if (line.startsWith("data: ")) {
-                            const data = line.slice(6);
-                            if (data === "[DONE]") {
-                                break;
+            const enqueueTTS = (text: string) => {
+                const cleaned = text.trim();
+                if (!cleaned || !isSpeechEnabled) return;
+                ttsQueue.push(cleaned);
+                flushTTSQueue();
+            };
+
+            // Add placeholder assistant message updated live
+            const assistantId = (Date.now() + 1).toString();
+            setMessages(prev => [...prev, { id: assistantId, role: "assistant", content: "…" }]);
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+
+                const chunk = decoder.decode(value, { stream: true });
+                const lines = chunk.split("\n").filter(l => l.startsWith("data: "));
+
+                for (const line of lines) {
+                    try {
+                        const payload = JSON.parse(line.slice(6));
+
+                        if (payload.done) {
+                            fullText = payload.fullText || fullText;
+                            // Enqueue any remaining buffer as the last TTS chunk
+                            if (sentenceBuffer.trim()) {
+                                enqueueTTS(sentenceBuffer);
+                                sentenceBuffer = "";
+                            } else if (!firstSentenceSpoken) {
+                                // Response was so short it had no sentence boundary
+                                enqueueTTS(fullText);
                             }
-                            try {
-                                const parsed = JSON.parse(data);
-                                if (parsed.text) {
-                                    fullResponse += parsed.text;
-                                    streamingMessageRef.current = fullResponse;
+                            allEnqueued = true;
+                            // If queue already drained before we set allEnqueued, kick restart now
+                            if (!ttsPlaying && ttsQueue.length === 0) {
+                                restartListening();
+                            }
+                        } else {
+                            const token: string = payload.token || "";
+                            fullText += token;
+                            sentenceBuffer += token;
 
-                                    // Update the streaming message
-                                    setMessages((prev) =>
-                                        prev.map((msg) =>
-                                            msg.id === assistantMessageId
-                                                ? { ...msg, content: fullResponse }
-                                                : msg
-                                        )
-                                    );
-                                }
-                            } catch (e) {
-                                // Ignore parse errors
+                            setMessages(prev => prev.map(m =>
+                                m.id === assistantId ? { ...m, content: fullText } : m
+                            ));
+
+                            // Enqueue first sentence as soon as we hit a boundary
+                            if (!firstSentenceSpoken && sentenceEnd.test(sentenceBuffer)) {
+                                const match = sentenceBuffer.search(sentenceEnd);
+                                const firstSentence = sentenceBuffer.slice(0, match + 1);
+                                sentenceBuffer = sentenceBuffer.slice(match + 1).trimStart();
+                                firstSentenceSpoken = true;
+                                enqueueTTS(firstSentence);
                             }
                         }
-                    }
-                }
-
-                // Speak the complete response
-                speakText(fullResponse);
-            } else {
-                // Handle JSON response (fallback or error)
-                let data;
-                try {
-                    const text = await response.text();
-                    if (!text || text.trim() === '') {
-                        throw new Error('Empty response from server');
-                    }
-                    data = JSON.parse(text);
-                } catch (parseError) {
-                    console.error('JSON parsing error:', parseError);
-                    setErrorMessage('Failed to parse server response');
-                    setMessages((prev) => prev.filter((msg) => msg.id !== assistantMessageId));
-                    return;
-                }
-
-                if (data.error) {
-                    setErrorMessage(data.error);
-                    // If there's a fallback response, use it
-                    if (data.fallback && typeof data.fallback === 'string') {
-                        setMessages((prev) =>
-                            prev.map((msg) =>
-                                msg.id === assistantMessageId
-                                    ? { ...msg, content: data.fallback }
-                                    : msg
-                            )
-                        );
-                        speakText(data.fallback);
-                    } else {
-                        // Remove the placeholder message if no fallback
-                        setMessages((prev) => prev.filter((msg) => msg.id !== assistantMessageId));
-                    }
-                } else {
-                    // Regular response
-                    setMessages((prev) =>
-                        prev.map((msg) =>
-                            msg.id === assistantMessageId
-                                ? { ...msg, content: data.response }
-                                : msg
-                        )
-                    );
-                    speakText(data.response);
+                    } catch { /* skip malformed SSE lines */ }
                 }
             }
+
+            setMessages(prev => prev.map(m =>
+                m.id === assistantId ? { ...m, content: fullText } : m
+            ));
+
         } catch (error) {
             console.error("Error sending message:", error);
-            setErrorMessage("Network error. Please check your connection and try again.");
-
-            // Remove the placeholder message
-            setMessages((prev) => prev.filter((msg) => msg.id !== assistantMessageId));
+            setMessages((prev) => [...prev, {
+                id: (Date.now() + 1).toString(),
+                role: "assistant",
+                content: "I ran into an issue — please try again.",
+            }]);
+            if (voiceBotModeRef.current) setTimeout(() => startListening(), 1000);
         } finally {
             setIsLoading(false);
-            setIsStreaming(false);
         }
-    };
+    }, [input, isLoading, context, stopListening, startListening, speakText, isSpeechEnabled]);
+
+    // Keep the ref always pointing to the latest handleSend
+    useEffect(() => { handleSendRef.current = handleSend; }, [handleSend]);
+
+    // Start Conversation from Overlay
+    const startConversation = useCallback(() => {
+        setShowStartOverlay(false);
+        setConversationStarted(true);
+        setVoiceBotMode(true);
+        setConversationState('greeting');
+
+        const greetingMessages = [
+            "Hi there! Thanks for calling CityMed Hospital. I'm Aria, your patient support agent. How can I help you today?",
+            "Hello! You've reached CityMed Hospital support. This is Aria speaking — what can I do for you today?",
+            "Hi! Thanks for calling CityMed Hospital. What can I help you with?",
+        ];
+        const greeting = greetingMessages[Math.floor(Math.random() * greetingMessages.length)];
+
+        speakText(greeting, () => {
+            setConversationState('idle');
+            setTimeout(() => startListening(), 300);
+        });
+    }, [speakText, startListening]);
+
+    // Toggle Voice Bot Mode
+    const toggleVoiceBotMode = useCallback(() => {
+        if (voiceBotMode) {
+            setConversationState('speaking');
+            speakText("Thanks for calling! Have a great day!", () => {
+                setVoiceBotMode(false);
+                stopListening();
+                stopSpeaking();
+                setConversationState('idle');
+            });
+        } else {
+            startConversation();
+        }
+    }, [voiceBotMode, stopListening, stopSpeaking, speakText, startConversation]);
 
     const handleReset = () => {
         setMessages(initialMessages);
         setContext(defaultContext);
-        if (audioRef.current) {
-            audioRef.current.pause();
-        }
         setIsEditingContext(false);
-        setErrorMessage(null);
-        window.speechSynthesis?.cancel();
+        setCurrentWorkflow([]);
+        setHighlightedChunks([]);
+        setFallbackMode(false);
+        setVoiceBotMode(false);
+        setConversationState('idle');
+        setInterimTranscript("");
+        setShowStartOverlay(true);
+        setConversationStarted(false);
+        stopListening();
+        stopSpeaking();
     };
 
     const toggleSpeech = () => {
-        if (isSpeechEnabled) {
-            window.speechSynthesis?.cancel();
-            if (audioRef.current) {
-                audioRef.current.pause();
-            }
-        }
+        if (isSpeechEnabled) stopSpeaking();
         setIsSpeechEnabled(!isSpeechEnabled);
     };
 
     return (
-        <div className="min-h-screen flex flex-col">
-            {/* Compact Header */}
-            <div className="relative border-b border-[var(--border-default)] bg-[var(--bg-primary)]/80 backdrop-blur-sm">
-                <div className="absolute inset-0 bg-gradient-radial opacity-30" />
-                <div className="container relative z-10 py-4">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/20 text-xs text-[var(--accent-primary)]">
-                                <Sparkles className="w-3.5 h-3.5" />
-                                Interactive AI Demo
-                            </span>
-                            <h1 className="text-xl md:text-2xl font-bold">
-                                <GradientText>RAG-Powered AI</GradientText> Assistant
-                            </h1>
-                        </div>
-                        {speechSupported && (
-                            <span className="hidden md:flex items-center gap-2 text-xs text-[var(--accent-primary)]">
-                                <Mic className="w-3.5 h-3.5" />
-                                Voice enabled
-                            </span>
-                        )}
-                    </div>
-                </div>
-            </div>
+        <>
+            {/* Start Conversation Overlay */}
+            <AnimatePresence>
+                {showStartOverlay && deepgramReady && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-md"
+                        onClick={() => setShowStartOverlay(false)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Escape') {
+                                setShowStartOverlay(false);
+                            }
+                        }}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="start-conversation-title"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            transition={{ duration: 0.3, delay: 0.1 }}
+                            className="relative max-w-lg mx-4 p-8 md:p-12 bg-gradient-to-br from-[var(--bg-secondary)]/95 to-[var(--bg-elevated)]/95 backdrop-blur-xl border border-[var(--border-subtle)] rounded-3xl shadow-2xl"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            {/* Decorative gradient orbs */}
+                            <div className="absolute -top-20 -right-20 w-40 h-40 bg-[var(--accent-primary)]/20 rounded-full blur-3xl" />
+                            <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-[var(--accent-secondary)]/20 rounded-full blur-3xl" />
 
-            {/* Centered Demo Interface */}
-            <div className="flex-1 flex items-center justify-center p-4 md:p-8">
+                            <div className="relative z-10 text-center">
+                                {/* Animated Microphone Icon */}
+                                <motion.div
+                                    animate={{
+                                        scale: [1, 1.1, 1],
+                                        rotate: [0, 5, -5, 0]
+                                    }}
+                                    transition={{
+                                        duration: 2,
+                                        repeat: Infinity,
+                                        ease: "easeInOut"
+                                    }}
+                                    className="inline-flex items-center justify-center w-20 h-20 mb-6 rounded-full bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] shadow-lg"
+                                >
+                                    <Mic className="w-10 h-10 text-white" />
+                                </motion.div>
+
+                                {/* Title */}
+                                <h2 id="start-conversation-title" className="text-2xl md:text-3xl font-bold mb-3">
+                                    <GradientText>Start a Conversation</GradientText>
+                                </h2>
+
+                                {/* Description */}
+                                <p className="text-[var(--text-secondary)] mb-8 leading-relaxed">
+                                    Talk to our AI-powered support agent just like you would on a phone call.
+                                    Ask questions, get help, and experience natural conversation.
+                                </p>
+
+                                {/* Start Button */}
+                                <Button
+                                    variant="primary"
+                                    size="lg"
+                                    onClick={startConversation}
+                                    className="w-full md:w-auto px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all"
+                                >
+                                    <Radio className="w-5 h-5 mr-2" />
+                                    Start Conversation
+                                </Button>
+
+                                {/* Skip Option */}
+                                <button
+                                    onClick={() => setShowStartOverlay(false)}
+                                    className="mt-4 text-sm text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] transition-colors"
+                                >
+                                    Skip and use text chat instead
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Hero Section */}
+            <section className="relative pt-32 pb-8 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-radial" />
+                <div className="gradient-orb gradient-orb-1 animate-float opacity-20" />
+
+                <div className="container relative z-10">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="max-w-3xl mx-auto text-center"
+                    >
+                        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--accent-primary)]/10 border border-[var(--accent-primary)]/20 text-sm text-[var(--accent-primary)] mb-6">
+                            <Sparkles className="w-4 h-4" />
+                            Real RAG + Agentic AI Workflows
+                        </span>
+                        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+                            <GradientText>Gemini 2.0 Powered Voice AI Agent</GradientText>
+                        </h1>
+                        <p className="text-lg text-[var(--text-secondary)]">
+                            Experience real RAG (Retrieval Augmented Generation) with agentic workflows.
+                            Watch the AI reason, plan, and execute multi-step tasks in real-time.
+                        </p>
+                        {deepgramReady && (
+                            <p className="text-sm text-[var(--accent-primary)] mt-2">
+                                🎤 Powered by Deepgram — speak naturally and I'll respond with a real human-like voice.
+                            </p>
+                        )}
+                        {fallbackMode && (
+                            <p className="text-sm text-yellow-500 mt-2">
+                                ⚠️ Running in fallback mode. Add GEMINI_API_KEY to .env.local for full RAG capabilities.
+                            </p>
+                        )}
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* Demo Interface */}
+            <Section className="py-8">
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.4 }}
-                    className="w-full max-w-7xl h-[85vh] bg-[var(--bg-secondary)] border border-[var(--border-default)] rounded-2xl overflow-hidden shadow-2xl"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                    className="bg-[var(--bg-secondary)] border border-[var(--border-subtle)] rounded-2xl overflow-hidden shadow-2xl"
                 >
                     {/* Demo Header */}
-                    <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border-default)] bg-[var(--bg-elevated)]">
+                    <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border-subtle)] bg-[var(--bg-elevated)]">
                         <div className="flex items-center gap-3">
                             <div className="flex gap-1.5">
                                 <div className="w-3 h-3 rounded-full bg-red-500/80" />
                                 <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
                                 <div className="w-3 h-3 rounded-full bg-green-500/80" />
                             </div>
-                            <span className="text-sm font-medium">RAG Demo - Hospital Appointment System</span>
+                            <span className="text-sm font-medium">Real-Time AI Workflow Visualization</span>
+
+                            {/* Conversation State Indicator */}
+                            {voiceBotMode && (
+                                <span className="text-xs px-2 py-1 rounded-full bg-[var(--accent-primary)]/10 text-[var(--accent-primary)] border border-[var(--accent-primary)]/20">
+                                    {conversationState === 'greeting' && '📞 Connecting...'}
+                                    {conversationState === 'listening' && '🎤 Listening...'}
+                                    {conversationState === 'processing' && '⚙️ Processing...'}
+                                    {conversationState === 'speaking' && '🔊 Speaking...'}
+                                    {conversationState === 'idle' && '⏸️ Ready'}
+                                </span>
+                            )}
+                        </div>
+                        <div className="flex items-center gap-2">
+                            {/* Voice Bot Mode Toggle */}
+                            {deepgramReady && (
+                                <Button
+                                    variant={voiceBotMode ? "primary" : "secondary"}
+                                    size="sm"
+                                    onClick={toggleVoiceBotMode}
+                                    title={voiceBotMode ? "Disable Voice Bot Mode" : "Enable Voice Bot Mode"}
+                                    className={voiceBotMode ? "animate-pulse" : ""}
+                                >
+                                    <Radio className="w-4 h-4 mr-1" />
+                                    Voice Bot {voiceBotMode ? "ON" : "OFF"}
+                                </Button>
+                            )}
+                            {deepgramReady && (
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={toggleSpeech}
+                                    title={isSpeechEnabled ? "Disable voice responses" : "Enable voice responses"}
+                                >
+                                    {isSpeechEnabled ? (
+                                        <Volume2 className="w-4 h-4 text-[var(--accent-primary)]" />
+                                    ) : (
+                                        <VolumeX className="w-4 h-4" />
+                                    )}
+                                </Button>
+                            )}
+                            <Button variant="ghost" size="sm" onClick={handleReset}>
+                                <RefreshCw className="w-4 h-4" />
+                                Reset
+                            </Button>
                         </div>
                     </div>
 
-                    {/* Settings Panel */}
-                    <AnimatePresence>
-                        {showSettings && (
-                            <motion.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: "auto", opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                className="border-b border-[var(--border-subtle)] bg-[var(--bg-primary)] overflow-hidden"
-                            >
-                                <div className="p-4 space-y-4">
-                                    {/* Gemini API Configuration */}
-                                    <div className="space-y-3">
-                                        <div className="flex items-center justify-between">
-                                            <h3 className="text-sm font-semibold">Gemini AI Configuration</h3>
-                                            <div className="flex items-center gap-2">
-                                                {apiKeyStatus === "configured" && (
-                                                    <span className="text-xs text-green-500 flex items-center gap-1">
-                                                        <Check className="w-3 h-3" />
-                                                        Connected
-                                                    </span>
-                                                )}
-                                            </div>
-                                        </div>
-                                        <div className="flex gap-2">
-                                            <input
-                                                type="password"
-                                                value={apiKeyInput}
-                                                onChange={(e) => setApiKeyInput(e.target.value)}
-                                                placeholder="Enter your Gemini API key..."
-                                                className="flex-1 px-3 py-2 rounded-lg bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)]"
-                                            />
-                                        </div>
-                                        <p className="text-xs text-[var(--text-tertiary)]">
-                                            Get your API key from{" "}
-                                            <a
-                                                href="https://aistudio.google.com/app/apikey"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-[var(--accent-primary)] hover:underline"
-                                            >
-                                                Google AI Studio
-                                            </a>
-                                        </p>
-                                    </div>
-
-                                    {/* ElevenLabs Voice Configuration */}
-                                    <div className="pt-3 border-t border-[var(--border-subtle)] space-y-3">
-                                        <h3 className="text-sm font-semibold">ElevenLabs Voice (Optional)</h3>
-                                        <div className="flex gap-2">
-                                            <input
-                                                type="password"
-                                                value={elevenlabsKeyInput}
-                                                onChange={(e) => setElevenlabsKeyInput(e.target.value)}
-                                                placeholder="Enter your ElevenLabs API key..."
-                                                className="flex-1 px-3 py-2 rounded-lg bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)]"
-                                            />
-                                        </div>
-
-                                        {/* Voice Selection */}
-                                        <div>
-                                            <label className="text-xs text-[var(--text-tertiary)] mb-2 block">Voice Persona</label>
-                                            <select
-                                                value={selectedVoice}
-                                                onChange={(e) => handleVoiceChange(e.target.value)}
-                                                className="w-full px-3 py-2 rounded-lg bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-primary)]"
-                                            >
-                                                <option value="rachel">🎯 Rachel - Calm, Professional (Default)</option>
-                                                <option value="adam">💼 Adam - Clear, Authoritative</option>
-                                                <option value="bella">😊 Bella - Warm, Friendly</option>
-                                                <option value="antoni">🔊 Antoni - Deep, Confident</option>
-                                            </select>
-                                        </div>
-
-                                        <p className="text-xs text-[var(--text-tertiary)]">
-                                            Get your API key from{" "}
-                                            <a
-                                                href="https://elevenlabs.io/app/settings/api-keys"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-[var(--accent-primary)] hover:underline"
-                                            >
-                                                ElevenLabs
-                                            </a>
-                                            . Natural AI voices (Free: 10k chars/month, Fallback: browser TTS)
-                                        </p>
-                                    </div>
-
-                                    {/* Save Button */}
-                                    <div className="flex justify-end pt-2">
-                                        <Button size="sm" onClick={handleSaveApiKey}>
-                                            Save Configuration
-                                        </Button>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-
-                    {/* Error Banner */}
-                    <AnimatePresence>
-                        {errorMessage && (
-                            <motion.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: "auto", opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                className="border-b border-[var(--border-subtle)] bg-yellow-500/10 overflow-hidden"
-                            >
-                                <div className="p-3 flex items-center gap-2 text-sm text-yellow-500">
-                                    <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                                    <span className="flex-1">{errorMessage}</span>
-                                    <button
-                                        onClick={() => setErrorMessage(null)}
-                                        className="p-1 hover:bg-yellow-500/20 rounded"
-                                    >
-                                        <X className="w-3 h-3" />
-                                    </button>
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-
-                    {/* Split View */}
-                    <div className="grid lg:grid-cols-2 h-full">
+                    {/* 3-Column Layout: Context | Chat | Workflow */}
+                    <div className="grid lg:grid-cols-[320px_1fr_280px] h-[70vh] max-h-[800px] overflow-hidden">
                         {/* Context Panel */}
-                        <div className="border-r border-[var(--border-default)] flex flex-col h-full min-h-0">
-                            <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-default)] bg-[var(--bg-primary)]">
+                        <div className="border-r border-[var(--border-subtle)] flex flex-col h-full min-h-0">
+                            <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-subtle)] bg-[var(--bg-primary)]">
                                 <div className="flex items-center gap-2">
                                     <FileText className="w-4 h-4 text-[var(--accent-primary)]" />
                                     <span className="text-sm font-medium">Context Document</span>
@@ -683,13 +716,17 @@ export default function DemoPage() {
                                     <textarea
                                         value={context}
                                         onChange={(e) => setContext(e.target.value)}
-                                        className="w-full h-full min-h-[500px] bg-[var(--bg-elevated)] border border-[var(--border-strong)] rounded-lg p-4 text-sm font-mono text-[var(--text-secondary)] focus:outline-none focus:border-[var(--accent-primary)] resize-none"
+                                        className="w-full h-full min-h-[500px] bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded-lg p-4 text-sm font-mono text-[var(--text-secondary)] focus:outline-none focus:border-[var(--accent-primary)] resize-none"
                                         placeholder="Enter your context here..."
                                     />
                                 ) : (
                                     <div className="prose prose-invert prose-sm max-w-none">
                                         <pre className="whitespace-pre-wrap text-sm text-[var(--text-secondary)] font-mono bg-transparent p-0">
-                                            {context}
+                                            {highlightedChunks.length > 0 ? (
+                                                <HighlightedContext context={context} chunks={highlightedChunks} />
+                                            ) : (
+                                                context
+                                            )}
                                         </pre>
                                     </div>
                                 )}
@@ -697,39 +734,10 @@ export default function DemoPage() {
                         </div>
 
                         {/* Chat Panel */}
-                        <div className="flex flex-col h-full min-h-0">
-                            <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-default)] bg-[var(--bg-primary)]">
-                                <div className="flex items-center gap-2">
-                                    <Bot className="w-4 h-4 text-[var(--accent-primary)]" />
-                                    <span className="text-sm font-medium">AI Assistant</span>
-                                </div>
-                                <div className="flex items-center gap-1">
-                                    {speechSupported && (
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            onClick={toggleSpeech}
-                                            title={isSpeechEnabled ? "Disable voice responses" : "Enable voice responses"}
-                                        >
-                                            {isSpeechEnabled ? (
-                                                <Volume2 className="w-4 h-4 text-[var(--accent-primary)]" />
-                                            ) : (
-                                                <VolumeX className="w-4 h-4" />
-                                            )}
-                                        </Button>
-                                    )}
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        onClick={() => setShowSettings(!showSettings)}
-                                        title="API Settings"
-                                    >
-                                        <Settings className="w-4 h-4" />
-                                    </Button>
-                                    <Button variant="ghost" size="sm" onClick={handleReset}>
-                                        <RefreshCw className="w-4 h-4" />
-                                    </Button>
-                                </div>
+                        <div className="flex flex-col border-r border-[var(--border-subtle)] h-full min-h-0">
+                            <div className="flex items-center gap-2 px-4 py-3 border-b border-[var(--border-subtle)] bg-[var(--bg-primary)]">
+                                <Bot className="w-4 h-4 text-[var(--accent-primary)]" />
+                                <span className="text-sm font-medium">AI Assistant</span>
                             </div>
 
                             {/* Messages */}
@@ -753,25 +761,33 @@ export default function DemoPage() {
                                                 <Bot className="w-4 h-4 text-[var(--accent-primary)]" />
                                             )}
                                         </div>
-                                        <div
-                                            className={`max-w-[80%] p-3 rounded-2xl text-sm ${message.role === "user"
-                                                ? "bg-[var(--accent-primary)] text-white rounded-br-sm"
-                                                : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] rounded-bl-sm"
-                                                }`}
-                                        >
-                                            <pre className="whitespace-pre-wrap font-sans">{message.content}</pre>
-                                            {message.role === "assistant" && message.content === "" && isStreaming && (
-                                                <div className="flex gap-1">
-                                                    <span className="w-2 h-2 bg-[var(--text-tertiary)] rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                                                    <span className="w-2 h-2 bg-[var(--text-tertiary)] rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                                                    <span className="w-2 h-2 bg-[var(--text-tertiary)] rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                                        <div className="flex-1">
+                                            <div
+                                                className={`max-w-[85%] p-3 rounded-2xl text-sm ${message.role === "user"
+                                                    ? "bg-[var(--accent-primary)] text-white rounded-br-sm ml-auto"
+                                                    : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] rounded-bl-sm"
+                                                    }`}
+                                            >
+                                                <pre className="whitespace-pre-wrap font-sans">{message.content}</pre>
+                                            </div>
+                                            {message.sourcesUsed && message.sourcesUsed.length > 0 && (
+                                                <div className="mt-2 flex flex-wrap gap-2">
+                                                    {message.sourcesUsed.map((source, idx) => (
+                                                        <span
+                                                            key={idx}
+                                                            className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-[var(--accent-primary)]/10 text-[var(--accent-primary)] rounded-full"
+                                                        >
+                                                            <TrendingUp className="w-3 h-3" />
+                                                            {(source.relevanceScore || 0).toFixed(2)} relevance
+                                                        </span>
+                                                    ))}
                                                 </div>
                                             )}
                                         </div>
                                     </motion.div>
                                 ))}
 
-                                {isLoading && !isStreaming && (
+                                {isLoading && (
                                     <motion.div
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
@@ -792,25 +808,18 @@ export default function DemoPage() {
                                 <div ref={messagesEndRef} />
                             </div>
 
-                            {/* Suggested Actions */}
-                            {messages.length <= 1 && !isLoading && (
-                                <div className="px-4 pb-2">
-                                    <div className="flex flex-wrap gap-2">
-                                        {suggestedActions.map((action) => (
-                                            <button
-                                                key={action}
-                                                onClick={() => handleSend(action)}
-                                                className="px-3 py-1.5 text-xs rounded-full bg-[var(--bg-elevated)] border border-[var(--border-default)] text-[var(--text-secondary)] hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)] transition-colors"
-                                            >
-                                                {action}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-
                             {/* Input */}
-                            <div className="p-4 border-t border-[var(--border-default)]">
+                            <div className="p-4 border-t border-[var(--border-subtle)]">
+                                {/* Voice Bot Mode Info */}
+                                {voiceBotMode && (
+                                    <div className="mb-2 text-xs text-center text-[var(--text-tertiary)]">
+                                        <span className="inline-flex items-center gap-1">
+                                            <Radio className="w-3 h-3 text-[var(--accent-primary)]" />
+                                            Voice Bot Mode Active - Speak naturally, I'll respond automatically
+                                        </span>
+                                    </div>
+                                )}
+
                                 <form
                                     onSubmit={(e) => {
                                         e.preventDefault();
@@ -822,11 +831,21 @@ export default function DemoPage() {
                                         type="text"
                                         value={input}
                                         onChange={(e) => setInput(e.target.value)}
-                                        placeholder={isListening ? "Listening..." : "Type your message..."}
-                                        className="flex-1 px-4 py-3 rounded-full bg-[var(--bg-elevated)] border border-[var(--border-strong)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-primary)] transition-colors"
-                                        disabled={isLoading}
+                                        placeholder={
+                                            voiceBotMode
+                                                ? (conversationState === 'greeting' ? "📞 Connecting..." :
+                                                    conversationState === 'listening' ? "🎤 Listening..." :
+                                                        conversationState === 'processing' ? "Processing..." :
+                                                            conversationState === 'speaking' ? "Speaking..." : "Ready to listen...")
+                                                : (isListening ? "Listening..." : "Type your message...")
+                                        }
+                                        className={`flex-1 px-4 py-3 rounded-full bg-[var(--bg-elevated)] border text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none transition-all ${isListening
+                                            ? 'border-[var(--accent-primary)] ring-2 ring-[var(--accent-primary)]/20'
+                                            : 'border-[var(--border-subtle)] focus:border-[var(--accent-primary)]'
+                                            }`}
+                                        disabled={isLoading || (voiceBotMode && conversationState !== 'idle' && conversationState !== 'listening')}
                                     />
-                                    {speechSupported && (
+                                    {deepgramReady && !voiceBotMode && (
                                         <Button
                                             type="button"
                                             variant={isListening ? "primary" : "secondary"}
@@ -846,22 +865,161 @@ export default function DemoPage() {
                                     </Button>
                                 </form>
                                 <p className="mt-2 text-xs text-[var(--text-tertiary)] text-center">
-                                    {isGeneratingVoice ? (
-                                        <span className="flex items-center justify-center gap-2 text-[var(--accent-primary)]">
-                                            <span className="inline-block w-2 h-2 bg-[var(--accent-primary)] rounded-full animate-pulse" />
-                                            Generating natural voice...
-                                        </span>
-                                    ) : apiKeyStatus === "configured" ? (
-                                        "✨ Powered by Gemini AI with RAG | 🎤 Natural voice by ElevenLabs"
-                                    ) : (
-                                        "Configure your Gemini API key in settings for AI-powered responses"
-                                    )}
+                                    {voiceBotMode
+                                        ? "Voice Bot Mode: Just speak, no need to click anything!"
+                                        : "Try: \"Book Dr. Sarah Smith on Friday at 2 PM\""
+                                    }
                                 </p>
+                            </div>
+                        </div>
+
+                        {/* Workflow Panel */}
+                        <div className="flex flex-col bg-[var(--bg-primary)] h-full min-h-0">
+                            <div className="flex items-center gap-2 px-4 py-3 border-b border-[var(--border-subtle)]">
+                                <GitBranch className="w-4 h-4 text-[var(--accent-primary)]" />
+                                <span className="text-sm font-medium">Workflow</span>
+                            </div>
+                            <div className="flex-1 overflow-auto p-4">
+                                {currentWorkflow.length > 0 ? (
+                                    <div className="space-y-3">
+                                        <AnimatePresence>
+                                            {currentWorkflow.map((step, idx) => (
+                                                <WorkflowStepDisplay key={step.id} step={step} index={idx} />
+                                            ))}
+                                        </AnimatePresence>
+                                    </div>
+                                ) : (
+                                    <div className="flex flex-col items-center justify-center h-full text-center text-[var(--text-tertiary)]">
+                                        <Zap className="w-8 h-8 mb-2 opacity-50" />
+                                        <p className="text-sm">Workflow steps will appear here</p>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
                 </motion.div>
+            </Section>
+
+            {/* Features Section - keeping the existing ones from original */}
+            <Section>
+                <div className="max-w-4xl mx-auto text-center mb-12">
+                    <h2 className="text-2xl md:text-3xl font-bold mb-4">
+                        Enhanced with <GradientText>RAG & Agentic AI</GradientText>
+                    </h2>
+                    <p className="text-[var(--text-secondary)]">
+                        Powered by Gemini 2.0, this demo showcases production-ready AI capabilities
+                    </p>
+                </div>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {[
+                        {
+                            icon: Brain,
+                            title: "Real RAG Technology",
+                            description: "Genuine retrieval augmented generation with context grounding and source attribution",
+                        },
+                        {
+                            icon: GitBranch,
+                            title: "Agentic Workflows",
+                            description: "Multi-step task execution with function calling and real-time visualization",
+                        },
+                        {
+                            icon: TrendingUp,
+                            title: "Relevance Scoring",
+                            description: "Smart context chunking with semantic similarity for accurate retrieval",
+                        },
+                        {
+                            icon: MessageSquare,
+                            title: "Deepgram Voice",
+                            description: "Human-like voice powered by Deepgram Nova-3 STT and Aura-2 TTS with barge-in support",
+                        },
+                        {
+                            icon: Network,
+                            title: "Function Calling",
+                            description: "AI executes real actions like checking availability and booking appointments",
+                        },
+                        {
+                            icon: Zap,
+                            title: "Real-Time Updates",
+                            description: "Watch the AI think, plan, and execute in real-time workflow panel",
+                        },
+                    ].map((feature, index) => (
+                        <motion.div
+                            key={index}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: index * 0.1 }}
+                            className="bg-[var(--bg-secondary)] border border-[var(--border-subtle)] rounded-2xl p-6 hover:border-[var(--border-default)] transition-all"
+                        >
+                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[var(--accent-primary)]/10 to-[var(--accent-secondary)]/10 flex items-center justify-center mb-4">
+                                <feature.icon className="w-6 h-6 text-[var(--accent-primary)]" />
+                            </div>
+                            <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+                            <p className="text-sm text-[var(--text-secondary)]">{feature.description}</p>
+                        </motion.div>
+                    ))}
+                </div>
+            </Section>
+        </>
+    );
+}
+
+// Workflow Step Component
+function WorkflowStepDisplay({ step, index }: { step: WorkflowStep; index: number }) {
+    const getStatusIcon = () => {
+        switch (step.status) {
+            case "completed":
+                return <CheckCircle className="w-4 h-4 text-green-500" />;
+            case "failed":
+                return <XCircle className="w-4 h-4 text-red-500" />;
+            case "running":
+                return <Loader2 className="w-4 h-4 text-[var(--accent-primary)] animate-spin" />;
+            default:
+                return <Clock className="w-4 h-4 text-[var(--text-tertiary)]" />;
+        }
+    };
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            transition={{ delay: index * 0.1 }}
+            className="flex gap-3 items-start"
+        >
+            <div className="flex-shrink-0 mt-0.5">{getStatusIcon()}</div>
+            <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-[var(--text-primary)]">{step.name}</p>
+                {step.details && (
+                    <p className="text-xs text-[var(--text-tertiary)] mt-1">{step.details}</p>
+                )}
+                {step.error && (
+                    <p className="text-xs text-red-500 mt-1">{step.error}</p>
+                )}
             </div>
-        </div>
+        </motion.div>
+    );
+}
+
+// Highlighted Context Component
+function HighlightedContext({ context, chunks }: { context: string; chunks: ContextChunk[] }) {
+    // Simple highlighting by checking if text is in any chunk
+    const lines = context.split("\n");
+
+    return (
+        <>
+            {lines.map((line, idx) => {
+                const isHighlighted = chunks.some(chunk => chunk.content.includes(line));
+                return (
+                    <div
+                        key={idx}
+                        className={isHighlighted ? "bg-[var(--accent-primary)]/20 px-1 rounded" : ""}
+                    >
+                        {line}
+                        {"\n"}
+                    </div>
+                );
+            })}
+        </>
     );
 }

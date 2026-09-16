@@ -8,80 +8,80 @@ import { ArrowRight, TrendingUp, Building2, Sparkles } from "lucide-react";
 
 const caseStudies = [
     {
-        id: "healthcare-ai",
-        industry: "Healthcare",
-        title: "AI-Powered Patient Scheduling System",
-        client: "Regional Medical Center",
-        description: "Implemented an intelligent appointment scheduling system that reduced no-shows by 40% and improved patient satisfaction scores.",
+        id: "creditcard-ai",
+        industry: "Credit Card",
+        title: "Building CRM Platforms at Fortune 100 Scale",
+        client: "Fortune 100 Credit Card Company",
+        description: `Experience in building and scaling multiple in-house CRM and customer servicing platforms for a Fortune 100 multinational enterprise. These platforms powered data and customer interactions for over 140 million customers, enabling 25,000+ service professionals to deliver seamless, high-quality support at global scale. The solutions were designed for high availability, security, and performance, supporting mission-critical operations across digital and assisted service channels.`,
         results: [
-            { metric: "40%", label: "Reduction in No-Shows" },
-            { metric: "60%", label: "Faster Scheduling" },
-            { metric: "95%", label: "Patient Satisfaction" },
+            { metric: "99.99%", label: "System Availability" },
+            { metric: "100%", label: "Data Accuracy" },
+            { metric: "95%", label: "User Satisfaction Score" },
         ],
         color: "#3B82F6",
     },
     {
-        id: "retail-automation",
-        industry: "Retail",
-        title: "Inventory Optimization with ML",
-        client: "National Retail Chain",
-        description: "Deployed machine learning models to predict demand and optimize inventory levels across 200+ locations.",
+        id: "travel-lifestyle",
+        industry: "Travel & Lifestyle",
+        title: "Omnichannel Customer Servicing Transformation",
+        client: "Large Travel Business",
+        description: "Migration of Voice and Digital Customer Servicing from a legacy provider to a modern, AI-focused cloud platform, successfully transitioning 25,000+ service professionals. The program included building IVR systems, intelligent routing flows, and a unified agent experience focused on true omnichannel servicing. Customer care professionals could seamlessly handle voice calls, chats, and emails simultaneously from a single interface. Customers retained the freedom to choose their preferred channel while consistently engaging with their Relationship Managers, delivering a seamless and efficient experience for both customers and service teams.",
         results: [
-            { metric: "30%", label: "Reduced Stockouts" },
-            { metric: "$2M", label: "Annual Savings" },
-            { metric: "25%", label: "Better Forecasting" },
+            { metric: "$14B", label: "Booking Revenue" },
+            { metric: "$10M", label: "Annual Savings" },
+            { metric: "400K", label: "Travel Bookings" },
         ],
         color: "#0EA5E9",
     },
     {
-        id: "fintech-chatbot",
+        id: "fintech-bot",
         industry: "Finance",
         title: "Conversational AI for Customer Service",
-        client: "Digital Banking Startup",
-        description: "Built and deployed an AI chatbot handling 80% of customer inquiries, reducing support costs while improving response times.",
+        client: "Digital Fintech",
+        description: "Led the discovery, design, and delivery of an AI-powered servicing platform spanning Chat Bots, Voice Bots, and Email Response Intelligence. The solution enabled intelligent conversation flows that collect information, maintain full context, and execute customer requests across channels. AI-driven responses and agent-assist capabilities reduced manual effort while ensuring seamless handoffs to service professionals when needed. The platform was built for enterprise scale, continuous learning, and high reliability. The outcome was faster resolutions, improved customer experience, and measurable gains in agent productivity.",
         results: [
-            { metric: "80%", label: "Queries Automated" },
+            { metric: "25%", label: "Queries Automated" },
             { metric: "24/7", label: "Availability" },
             { metric: "4.8/5", label: "Customer Rating" },
         ],
         color: "#38BDF8",
     },
     {
-        id: "manufacturing-qa",
-        industry: "Manufacturing",
-        title: "Computer Vision Quality Assurance",
-        client: "Electronics Manufacturer",
-        description: "Implemented computer vision system for real-time defect detection, catching issues human inspectors often missed.",
+        id: "nbfc-qa",
+        industry: "NBFC",
+        title: "Agentic AI Flow for Operational Automation",
+        client: "Non Banking Financial Services Company",
+        description: "Implemented Agentic AI for automating complex, multi-step operational workflows. Intelligent AI agents were designed to understand intent, reason across systems, and autonomously execute tasks such as data validation, exception handling, and decision-based actions. The solution orchestrated workflows end to end with minimal human intervention. This significantly reduced manual touchpoints and process latency. The outcome was faster turnaround times, improved operational efficiency, and scalable automation while maintaining accuracy, compliance, and auditability",
         results: [
-            { metric: "99.5%", label: "Detection Accuracy" },
-            { metric: "50%", label: "Faster Inspection" },
-            { metric: "70%", label: "Reduced Defects" },
+            { metric: "50%", label: "Manual Effort Reduction" },
+            { metric: "50%", label: "Faster Process Turnaround Time" },
+            { metric: "100%", label: "Accuracy" },
         ],
         color: "#3B82F6",
     },
     {
-        id: "logistics-optimization",
-        industry: "Logistics",
-        title: "Route Optimization Engine",
-        client: "Delivery Services Company",
-        description: "AI-powered route optimization reducing delivery times and fuel costs across a fleet of 500+ vehicles.",
+        id: "staff-augmentation",
+        industry: "Engineering Staffing",
+        title: "Staffing for Engineering & Product",
+        client: "Banking And Financial Services Firm",
+        description: "Experience in hiring and deploying top-tier engineering and product talent to help businesses scale without the need for permanent hires. Our teams consist of highly skilled engineers working on the latest technologies and seasoned product professionals who deliver immediate impact. We offer flexible engagement models, allowing companies to scale capacity quickly and efficiently while maintaining high quality and speed.",
         results: [
-            { metric: "20%", label: "Faster Deliveries" },
-            { metric: "15%", label: "Fuel Savings" },
-            { metric: "35%", label: "More Deliveries/Day" },
+            { metric: "50%", label: "Reduced Time-to-Hire" },
+            { metric: "High", label: "Delivering Value within weeks" },
+            { metric: "100%", label: "Contract Renewals" },
         ],
         color: "#0EA5E9",
     },
     {
-        id: "hr-analytics",
-        industry: "Human Resources",
-        title: "Predictive HR Analytics Platform",
-        client: "Enterprise Corporation",
-        description: "Built analytics platform predicting employee attrition and identifying factors affecting workplace satisfaction.",
+        id: "application-development",
+        industry: "Retail",
+        title: "E-Commerce Application Development",
+        client: "Astrology, Numerology and Inovicing Platforms",
+        description: "Our team designed and built two end-to-end digital platforms: an Astrology & Numerology platform and a Business Invoicing platform, delivered as scalable web applications and fully functional mobile apps on the app stores. We led the product discovery, UX design, and full-stack development for both solutions. The platforms were architected for reliability, performance, and ease of use across devices. From concept to deployment, we ensured seamless user experiences and ongoing maintenance. The result was production-ready platforms that enabled rapid user adoption and business growth.",
         results: [
-            { metric: "45%", label: "Reduced Turnover" },
-            { metric: "85%", label: "Prediction Accuracy" },
-            { metric: "3x", label: "Faster Hiring" },
+            { metric: "10K", label: "Downloads on App Stores" },
+            { metric: "90%", label: "Rating" },
+            { metric: "3x", label: "Downloads in 24 hours" },
         ],
         color: "#38BDF8",
     },
@@ -187,7 +187,7 @@ export default function CaseStudiesPage() {
                                     </div>
 
                                     <Link
-                                        href={`/case-studies/${study.id}`}
+                                        href="/contact"
                                         className="inline-flex items-center gap-1 text-sm font-medium text-[var(--accent-primary)] hover:gap-2 transition-all"
                                     >
                                         Read Full Case Study
@@ -241,7 +241,7 @@ export default function CaseStudiesPage() {
                             Ready to Be Our Next Success Story?
                         </h2>
                         <p className="text-lg text-[var(--text-secondary)] mb-8 max-w-2xl mx-auto">
-                            Join the growing list of companies transforming their operations with ANDRIGA&apos;s AI solutions.
+                            Join the growing list of companies transforming their operations with ANDRIGA&apos;s Digital Transformation and AI solutions.
                         </p>
                         <Link href="/contact">
                             <button className="btn btn-primary text-lg px-8 py-4">

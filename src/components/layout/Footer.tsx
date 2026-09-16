@@ -1,33 +1,33 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Linkedin, Twitter, Github, Mail } from "lucide-react";
+import { Linkedin, Twitter, Mail, Instagram, Facebook, MessageCircle } from "lucide-react";
 
 const footerLinks = {
     product: [
-        { label: "Services", href: "/services" },
+        { label: "Services", href: "/#services" },
         { label: "Case Studies", href: "/case-studies" },
         { label: "AI Demo", href: "/demo" },
-        { label: "Pricing", href: "/pricing" },
+        { label: "Pricing", href: "/contact" },
     ],
     company: [
         { label: "About", href: "/about" },
-        { label: "Blog", href: "/blog" },
         { label: "Careers", href: "/careers" },
         { label: "Contact", href: "/contact" },
     ],
     resources: [
-        { label: "Documentation", href: "/docs" },
-        { label: "Support", href: "/support" },
+        { label: "Support", href: "/contact" },
         { label: "Privacy Policy", href: "/privacy" },
         { label: "Terms of Service", href: "/terms" },
     ],
 };
 
 const socialLinks = [
-    { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-    { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
-    { icon: Github, href: "https://github.com", label: "GitHub" },
-    { icon: Mail, href: "mailto:contact@andriga.com", label: "Email" },
+    { icon: Instagram, href: "#", label: "Instagram" },
+    { icon: Facebook, href: "#", label: "Facebook" },
+    { icon: Linkedin, href: "#", label: "LinkedIn" },
+    { icon: Twitter, href: "#", label: "Twitter" },
+    { icon: MessageCircle, href: "#", label: "WhatsApp" },
+    { icon: Mail, href: "#", label: "Email" },
 ];
 
 export default function Footer() {
@@ -40,11 +40,11 @@ export default function Footer() {
                     <div className="lg:col-span-2">
                         <Link href="/" className="flex items-center mb-4">
                             <Image
-                                src="/andriga-logo.png"
+                                src="/andriga-logo-v2.png"
                                 alt="ANDRIGA Logo"
-                                width={350}
-                                height={125}
-                                className="h-20 w-auto"
+                                width={240}
+                                height={88}
+                                className="h-14 w-auto"
                             />
                         </Link>
                         <p className="text-[var(--text-secondary)] mb-6 max-w-sm">
@@ -57,8 +57,6 @@ export default function Footer() {
                                 <a
                                     key={social.label}
                                     href={social.href}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
                                     className="w-10 h-10 rounded-full bg-[var(--bg-elevated)] border border-[var(--border-subtle)] flex items-center justify-center text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--border-default)] transition-all duration-200"
                                     aria-label={social.label}
                                 >

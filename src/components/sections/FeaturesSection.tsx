@@ -15,7 +15,7 @@ const features = [
     {
         icon: Zap,
         title: "Lightning Fast",
-        description: "Deploy AI solutions in weeks, not months. Our streamlined process gets you results quickly.",
+        description: "Deploy your MVP in 4 weeks. Our streamlined process gets you results quickly.",
     },
     {
         icon: Shield,
@@ -25,7 +25,7 @@ const features = [
     {
         icon: Clock,
         title: "24/7 Availability",
-        description: "AI-powered systems that never sleep. Serve your customers around the clock.",
+        description: "AI-powered systems that never sleep. We serve our customers around the clock.",
     },
     {
         icon: Puzzle,

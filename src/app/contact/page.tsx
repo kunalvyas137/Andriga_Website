@@ -5,10 +5,12 @@ import { motion } from "framer-motion";
 import Section from "@/components/ui/Section";
 import Button from "@/components/ui/Button";
 import GradientText from "@/components/ui/GradientText";
-import { Mail, Phone, MapPin, Send, Clock, CheckCircle } from "lucide-react";
+import { Mail, Phone, MapPin, Send, CheckCircle } from "lucide-react";
 
 export default function ContactPage() {
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState("");
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -16,10 +18,24 @@ export default function ContactPage() {
         message: "",
     });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Simulate form submission
-        setIsSubmitted(true);
+        setIsLoading(true);
+        setError("");
+        try {
+            const res = await fetch("/api/contact", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData),
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || "Something went wrong.");
+            setIsSubmitted(true);
+        } catch (err: any) {
+            setError(err.message || "Failed to send. Please try again.");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -86,8 +102,8 @@ export default function ContactPage() {
                                 </div>
                                 <div>
                                     <h4 className="font-semibold mb-1">Call Us</h4>
-                                    <a href="tel:+1234567890" className="text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors">
-                                        +1 (234) 567-890
+                                    <a href="tel:+19547601657" className="text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors">
+                                        954-760-1657
                                     </a>
                                 </div>
                             </div>
@@ -99,32 +115,20 @@ export default function ContactPage() {
                                 <div>
                                     <h4 className="font-semibold mb-1">Visit Us</h4>
                                     <p className="text-[var(--text-secondary)]">
-                                        123 Innovation Drive<br />
-                                        Tech City, TC 12345
+                                        Ft Lauderdale, FL
                                     </p>
                                 </div>
                             </div>
 
-                            <div className="flex items-start gap-4">
-                                <div className="w-12 h-12 rounded-xl bg-[var(--accent-primary)]/10 flex items-center justify-center flex-shrink-0">
-                                    <Clock className="w-5 h-5 text-[var(--accent-primary)]" />
-                                </div>
-                                <div>
-                                    <h4 className="font-semibold mb-1">Business Hours</h4>
-                                    <p className="text-[var(--text-secondary)]">
-                                        Monday - Friday: 9:00 AM - 6:00 PM<br />
-                                        Saturday - Sunday: Closed
-                                    </p>
-                                </div>
-                            </div>
+
                         </div>
 
                         {/* Quick Stats */}
                         <div className="grid grid-cols-3 gap-4 p-6 bg-[var(--bg-secondary)] border border-[var(--border-subtle)] rounded-2xl">
                             {[
-                                { value: "< 24h", label: "Response Time" },
-                                { value: "98%", label: "Satisfaction" },
-                                { value: "100+", label: "Clients" },
+                                { value: "< 24h", label: "Founder Response Time" },
+                                { value: "50+ Years", label: "Technical Leadership Experience" },
+                                { value: "Long Term", label: "Partnerships" },
                             ].map((stat, index) => (
                                 <div key={index} className="text-center">
                                     <div className="text-xl font-bold gradient-text">{stat.value}</div>
@@ -224,9 +228,13 @@ export default function ContactPage() {
                                         />
                                     </div>
 
-                                    <Button type="submit" size="lg" className="w-full">
-                                        Send Message
-                                        <Send className="w-4 h-4" />
+                                    {error && (
+                                        <p className="text-sm text-red-400 text-center">{error}</p>
+                                    )}
+
+                                    <Button type="submit" size="lg" className="w-full" disabled={isLoading}>
+                                        {isLoading ? "Sending…" : "Send Message"}
+                                        {!isLoading && <Send className="w-4 h-4" />}
                                     </Button>
 
                                     <p className="text-xs text-[var(--text-tertiary)] text-center">
@@ -265,6 +273,14 @@ export default function ContactPage() {
                         {
                             q: "How do you ensure data security?",
                             a: "Security is our top priority. We follow industry best practices, are SOC 2 compliant, and can work with your existing security requirements. All data is encrypted and handled according to strict protocols.",
+                        },
+                        {
+                            q: "Is it possible to Digitally Transform in 1 month?",
+                            a: "Digital Transformation timelines vary based on the type and complexity of the application. The duration depends on your project requirements. To get an accurate timeline, please get in touch with us.",
+                        },
+                        {
+                            q: "Why should i choose Andriga to work with?",
+                            a: "Because we are a reliable partner who focuses on making high-quality impact to your business. We are rapidly growing as a company that has global experience working with Fortune companies.",
                         },
                     ].map((faq, index) => (
                         <motion.div

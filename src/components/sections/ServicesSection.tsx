@@ -1,46 +1,45 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
 import Section, { SectionHeader } from "@/components/ui/Section";
 import Card, { CardTitle, CardDescription } from "@/components/ui/Card";
-import { Brain, Cpu, Users, TrendingUp, MessageSquare, Database, ArrowRight } from "lucide-react";
+import { Sparkles, Bot, Code2, Target, UserSearch, Workflow } from "lucide-react";
 
 const services = [
     {
-        icon: Brain,
-        title: "AI Strategy & Consulting",
-        description: "Expert guidance to identify AI opportunities and create a roadmap for digital transformation tailored to your business goals.",
+        icon: Sparkles,
+        title: "Digital Transformation",
+        description: "We modernize businesses by replacing legacy technologies with scalable, cloud-native solutions. By embedding AI and agentic workflows, we eliminate manual processes, accelerate operations, and drive automation with measurable efficiency across the organization.",
         color: "#3B82F6",
     },
     {
-        icon: Cpu,
-        title: "Custom AI Development",
-        description: "Build intelligent solutions from scratch - chatbots, recommendation engines, predictive analytics, and more.",
+        icon: Bot,
+        title: "Contact Center & Conversational AI",
+        description: "We build and modernize intelligent contact centers by integrating AI across voice, chat, and email to transform your customer support into a seamless, automated, and hyper-efficient operation.",
         color: "#0EA5E9",
     },
     {
-        icon: MessageSquare,
-        title: "Conversational AI",
-        description: "Deploy AI-powered chatbots and virtual assistants that understand context and provide human-like interactions.",
+        icon: Code2,
+        title: "Web & Mobile App Development",
+        description: "We build custom web and mobile applications tailored to your business needs, from concept to deployment. Our team also enhances existing applications and seamlessly integrates business systems to extend functionality, improve performance, and accelerate growth.",
         color: "#38BDF8",
     },
     {
-        icon: Database,
-        title: "Data Analytics & ML",
-        description: "Transform your data into actionable insights with advanced machine learning models and analytics dashboards.",
+        icon: UserSearch,
+        title: "Talent Acquisition & Workforce Solutions",
+        description: "We Bridge your capability gaps by providing technical and non-technical talent through flexible, contract-based workforce solutions tailored to your enterprise's specific project needs.",
         color: "#3B82F6",
     },
     {
-        icon: Users,
-        title: "AI Training & Support",
-        description: "Empower your team with comprehensive training programs and ongoing support to maximize AI adoption.",
+        icon: Workflow,
+        title: "Business Process Outsourcing",
+        description: "We streamline your operations by providing scalable, expert BPO solutions ranging from customer support to specialized technical assistance.",
         color: "#0EA5E9",
     },
     {
-        icon: TrendingUp,
-        title: "Process Automation",
-        description: "Streamline operations with intelligent automation that learns and improves, reducing costs and increasing efficiency.",
+        icon: Target,
+        title: "Product, Project & Agile Delivery Coaching",
+        description: "We coach organizations on effective product and project management, guiding teams from concept to delivery with strong strategic and execution discipline. In parallel, we enable Agile and lean delivery adoption, helping teams build the right frameworks to accelerate speed-to-market and deliver consistent business outcomes.",
         color: "#38BDF8",
     },
 ];
@@ -69,8 +68,8 @@ export default function ServicesSection() {
         <Section id="services" withGrid>
             <SectionHeader
                 badge="Our Services"
-                title="AI Solutions That Drive Results"
-                subtitle="From strategy to implementation, we provide end-to-end AI services designed to transform your business operations."
+                title="Digital Transformation and AI Solutions that drive results"
+                subtitle="From strategy to implementation, we provide end-to-end Technology & AI services designed to transform your business operations."
             />
 
             <motion.div
@@ -91,13 +90,6 @@ export default function ServicesSection() {
                             </div>
                             <CardTitle>{service.title}</CardTitle>
                             <CardDescription>{service.description}</CardDescription>
-                            <Link
-                                href="/services"
-                                className="inline-flex items-center gap-1 mt-4 text-sm font-medium text-[var(--accent-primary)] hover:gap-2 transition-all"
-                            >
-                                Learn more
-                                <ArrowRight className="w-4 h-4" />
-                            </Link>
                         </Card>
                     </motion.div>
                 ))}

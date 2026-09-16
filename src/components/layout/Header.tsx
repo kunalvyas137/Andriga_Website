@@ -10,9 +10,8 @@ import { Menu, X } from "lucide-react";
 const navLinks = [
     { href: "/", label: "Home" },
     { href: "/about", label: "About" },
-    { href: "/services", label: "Services" },
+    { href: "/#services", label: "Services" },
     { href: "/case-studies", label: "Case Studies" },
-    { href: "/blog", label: "Blog" },
     { href: "/demo", label: "AI Demo", isHighlighted: true },
 ];
 
@@ -53,11 +52,11 @@ export default function Header() {
                             className="relative"
                         >
                             <Image
-                                src="/andriga-logo.png"
+                                src="/andriga-logo-v2.png"
                                 alt="ANDRIGA Logo"
-                                width={350}
-                                height={125}
-                                className="h-20 w-auto"
+                                width={260}
+                                height={96}
+                                className="h-16 md:h-20 w-auto"
                                 priority
                             />
                         </motion.div>

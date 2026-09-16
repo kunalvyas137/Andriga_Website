@@ -10,41 +10,23 @@ import { Target, Eye, Heart, Users, Award, Lightbulb, ArrowRight, Rocket } from 
 const values = [
     {
         icon: Lightbulb,
-        title: "Innovation First",
-        description: "We constantly push boundaries to deliver cutting-edge AI solutions that give our clients a competitive edge.",
+        title: "Customer",
+        description: "We prioritize customer needs above everything - designing conversations, solutions, and systems that elevate every interaction and deliver exceptional experiences.",
     },
     {
         icon: Users,
-        title: "Client Partnership",
-        description: "We work alongside our clients as true partners, understanding their unique needs and challenges.",
+        title: "Integrity And Trust",
+        description: "We operate with absolute transparency, data responsibility, and ethical AI practices to build trust with clients, employees and partners.",
     },
     {
         icon: Heart,
-        title: "Integrity",
-        description: "We believe in transparent communication, ethical AI practices, and building trust through every interaction.",
+        title: "Collaboration And Empowerment",
+        description: "Best solutions come from empowered teams working together. We encourage curiosity, creativity, and shared ownership.",
     },
     {
         icon: Award,
-        title: "Excellence",
-        description: "We strive for excellence in everything we do, from code quality to customer service.",
-    },
-];
-
-const team = [
-    {
-        name: "Kunal Vyas",
-        role: "Co-Founder",
-        bio: "Passionate about leveraging AI to transform how businesses operate and serve their customers.",
-    },
-    {
-        name: "Shivenderjeet Singh",
-        role: "Co-Founder",
-        bio: "Dedicated to building scalable AI solutions that deliver real business value.",
-    },
-    {
-        name: "Rodolfo Luciani",
-        role: "Co-Founder",
-        bio: "Focused on bridging the gap between cutting-edge AI technology and practical business applications.",
+        title: "Continuous Learning And Innovation",
+        description: "In an AI-Driven world, learning is the key advantage. We embrace growth, adapt quickly, and stay ahead by evolving our skills, strategies and mindset.",
     },
 ];
 
@@ -103,9 +85,13 @@ export default function AboutPage() {
                         </div>
                         <h3 className="text-2xl font-bold mb-4">Our Mission</h3>
                         <p className="text-[var(--text-secondary)]">
-                            To democratize AI technology by providing small and medium-sized businesses
-                            with enterprise-grade AI solutions that drive real business value. We bridge
-                            the gap between cutting-edge technology and practical implementation.
+                            Our mission is to partner with organizations to design and implement scalable,
+                            intelligent solutions that drive efficiency, engagement, and growth.
+                            We help our clients harness the power of AI and technology to achieve
+                            measurable transformation.
+                            Through smart automation, data-driven insights, and AI-powered experiences,
+                            we enable businesses to deliver seamless interactions and stay ahead in a
+                            rapidly evolving digital landscape.
                         </p>
                     </motion.div>
 
@@ -120,9 +106,8 @@ export default function AboutPage() {
                         </div>
                         <h3 className="text-2xl font-bold mb-4">Our Vision</h3>
                         <p className="text-[var(--text-secondary)]">
-                            A world where every business, regardless of size, can harness the power of
-                            AI to enhance customer experiences, streamline operations, and unlock new
-                            opportunities for growth and innovation.
+                            Our vision is to become the most trusted and ethical AI-powered technology partner,
+                            transforming how businesses operate, innovate, and engage with the world.
                         </p>
                     </motion.div>
                 </div>
@@ -133,7 +118,7 @@ export default function AboutPage() {
                 <SectionHeader
                     badge="Our Values"
                     title="What Drives Us"
-                    subtitle="The principles that guide our work and define our culture."
+                    subtitle="We believe Technology should amplify human potential. Our philosophy is to build AI systems that empower people, enrich interactions, and create meaningful impact."
                 />
 
                 <motion.div
@@ -162,32 +147,37 @@ export default function AboutPage() {
             {/* Team */}
             <Section>
                 <SectionHeader
-                    badge="Our Team"
-                    title="Meet the Founders"
-                    subtitle="A passionate team committed to bringing AI solutions to businesses worldwide."
+                    badge="Our Focus"
+                    title="We Don't Build Customers. We Build Relationships."
+                    subtitle="A passionate team committed to bringing Digital Transformation & AI solutions to businesses worldwide."
                 />
 
                 <motion.div
-                    variants={containerVariants}
-                    initial="hidden"
-                    whileInView="visible"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto"
+                    transition={{ duration: 0.6, ease: "easeOut" }}
+                    className="max-w-5xl mx-auto"
                 >
-                    {team.map((member, index) => (
-                        <motion.div
-                            key={index}
-                            variants={itemVariants}
-                            className="bg-[var(--bg-secondary)] border border-[var(--border-subtle)] rounded-2xl p-6 text-center group hover:border-[var(--border-default)] transition-all"
-                        >
-                            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[var(--accent-primary)] to-[var(--accent-secondary)] mx-auto mb-4 flex items-center justify-center text-2xl font-bold text-white">
-                                {member.name.split(" ").map(n => n[0]).join("")}
-                            </div>
-                            <h4 className="text-xl font-semibold mb-1">{member.name}</h4>
-                            <p className="text-sm text-[var(--accent-primary)] mb-3">{member.role}</p>
-                            <p className="text-sm text-[var(--text-secondary)]">{member.bio}</p>
-                        </motion.div>
-                    ))}
+                    <div className="rounded-3xl border-2 border-[var(--border-subtle)] bg-gradient-to-br from-[var(--bg-secondary)] to-[var(--bg-elevated)] px-8 py-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] backdrop-blur-md md:px-12 md:py-14">
+                        <div className="space-y-6 text-[var(--text-secondary)] leading-relaxed text-lg md:text-xl">
+                            <p className="text-[var(--text-primary)] font-medium text-xl md:text-2xl">
+                                At Andriga, we build production-ready AI systems that deliver measurable business outcomes—no hype, just results.
+                            </p>
+                            <p>
+                                We bring industry-proven playbooks and reference architectures that dramatically reduce time-to-value and execution risk.
+                            </p>
+                            <p>
+                                Our AI transformation approach combines reusable frameworks, intelligent automation, and governance models designed to scale responsibly in enterprise environments.
+                            </p>
+                            <p>
+                                Every engagement is outcome-driven with measurable ROI, embedded controls, and solutions that are secure, compliant, and resilient from day one.
+                            </p>
+                            <p className="text-[var(--text-primary)] font-semibold text-xl border-l-4 border-[var(--accent-primary)] pl-6">
+                                Founded by operators who've scaled systems in Fortune companies, we bring practical experience and a hands-on partnership model that goes beyond traditional consulting.
+                            </p>
+                        </div>
+                    </div>
                 </motion.div>
             </Section>
 
@@ -203,12 +193,10 @@ export default function AboutPage() {
                         <Rocket className="w-8 h-8 text-[var(--accent-primary)]" />
                     </div>
                     <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                        We&apos;re Actively Looking for Our First Clients!
+                        We partner with Forward-Thinking Businesses
                     </h2>
                     <p className="text-lg text-[var(--text-secondary)] mb-8">
-                        As a newly founded company in 2025, we&apos;re eager to partner with forward-thinking
-                        businesses ready to embrace AI transformation. Be among our first clients and
-                        benefit from our dedicated attention and competitive introductory rates.
+                        Founded in 2025, we collaborate with organizations ready to embrace AI-driven transformation. We focus on building long-term partnerships where we work closely together to drive impact, innovation & growth.
                     </p>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                         <Link href="/contact">
