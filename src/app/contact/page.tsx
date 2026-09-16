@@ -102,8 +102,8 @@ export default function ContactPage() {
                                 </div>
                                 <div>
                                     <h4 className="font-semibold mb-1">Call Us</h4>
-                                    <a href="tel:+19547601657" className="text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors">
-                                        954-760-1657
+                                    <a href="tel:+917827254580" className="text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors">
+                                        +91 78272 54580
                                     </a>
                                 </div>
                             </div>
